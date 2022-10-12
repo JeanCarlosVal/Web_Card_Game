@@ -1,87 +1,90 @@
-rankconversions = {
-    "ace":1,
-    "two":2,
-    "three":3,
-    "four":4,
-    "five":5,
-    "six":6,
-    "seven":7,
-    "eight":8,
-    "nine":9,
-    "ten":10,
-    "jack":11,
-    "queen":12,
-    "king":13
+ranking = {
+    "A":1,
+    "2":2,
+    "3":3,
+    "4":4,
+    "5":5,
+    "6":6,
+    "7":7,
+    "8":8,
+    "9":9,
+    "10":10,
+    "J":11,
+    "Q":12,
+    "K":13
 };
 
-const suiteconversions = {
-    "club":1,
-    "diamond":2,
-    "heart":3,
-    "spade":4
+const suiting = {
+    "C":1,
+    "D":2,
+    "H":3,
+    "S":4
 };
 
-function rank_strToInt(rank) {
-    if (typeof rank !== 'string') {
-        throw new Error("Invalid Rank Type:" + typeof rank);
+function toNumericRank(nameRank) {
+    if (typeof nameRank !== 'string') {
+        throw new Error("Invalid Rank Type:" + typeof nameRank);
     }
-    if (isRank(rank)) {
-        return rankconversions[rank];
-    }
-    else {
-        throw new Error("Invalid Rank Name:" + rank + ". Must be 'ace','two','three','four','five','six','seven','eight','nine','ten','jack,'queen', or 'king'.");
-    }
-}
-function rank_intToStr(rank) {
-    if (typeof rank !== 'number') {
-        throw new Error("Invalid Rank Type:" + typeof rank + ". Must be 'number'.");
-    }
-    if (rank > 13 || rank < 1) {
-        throw new Error("Integer out of Range:" + rank +  + ". Must be between 1 and 13.");
-    }
-    return Object.keys(rankconversions).find(key => rankconversions[key] === rank);
-}
-
-function suite_strToInt(suite) {
-    if (typeof suite !== 'string') {
-        throw new Error("Invalid Suite Type:" + typeof suite + ". Must be 'string'");
-    }
-    if (isSuite(suite)) {
-        return suiteconversions[suite];
+    if (isRank(nameRank)) {
+        return ranking[nameRank];
     }
     else {
-        throw new Error("Invalid Suite Name:" + suite + ". Must be club, diamond, heart, or spade.");
+        throw new Error("Invalid Rank Name:" + nameRank + ". Must be 'ace','two','three','four','five','six','seven','eight','nine','ten','jack,'queen', or 'king'.");
+    }
+}
+function toNameRank(numericRank) {
+    if (typeof numericRank !== 'number') {
+        throw new Error("Invalid Rank Type:" + typeof numericRank + ". Must be 'number'.");
+    }
+    if (numericRank > 13 || numericRank < 1) {
+        throw new Error("Integer out of Range:" + numericRank +  + ". Must be between 1 and 13.");
+    }
+    return Object.keys(ranking).find(key => ranking[key] === numericRank);
+}
+function toNumericSuite(nameSuite) {
+    if (typeof nameSuite !== 'string') {
+        throw new Error("Invalid Suite Type:" + typeof nameSuite + ". Must be 'string'");
+    }
+    if (isSuite(nameSuite)) {
+        return suiting[nameSuite];
+    }
+    else {
+        throw new Error("Invalid Suite Name:" + nameSuite + ". Must be club, diamond, heart, or spade.");
     }  
 }
-function suite_intToStr(suite) {
-    if (typeof suite !== 'number') {
-        throw new Error("Invalid Suite Type:" + typeof suite + ". Must be 'number'.");
+function toNameSuite(numericSuite) {
+    if (typeof numericSuite !== 'number') {
+        throw new Error("Invalid Suite Type:" + typeof numericSuite + ". Must be 'number'.");
     }
-    if (suite > 4 || suite < 1) {
-        throw new Error("Integer out of Range:" + suite + ". Must be between 1 and 4.");
+    if (numericSuite > 4 || numericSuite < 1) {
+        throw new Error("Integer out of Range:" + numericSuite + ". Must be between 1 and 4.");
     }
-    return Object.keys(suiteconversions).find(key => suiteconversions[key] === suite);
+    return Object.keys(suiting).find(key => suiting[key] === numericSuite);
 }
 
 function isRank(rank) {
-    if (rankconversions[rank] === undefined) {
+    if (ranking[rank] === undefined) {
         return false;
     }
     return true;
 }
 function isSuite(suite) {
-    if (suiteconversions[suite] === undefined) {
+    if (suiting[suite] === undefined) {
         return false;
     }
     return true;
 }
 
+function help() {
+    console.log("This module provides common card functionality like converting numeric rank/suite to named rank/suite and vice versa, valid ranks and suites");
+}
+
 module.exports = {
-    rank_intToStr,
-    rank_strToInt,
-    suite_intToStr,
-    suite_strToInt,
+    toNameRank,
+    toNumericRank,
+    toNameSuite,
+    toNumericSuite,
     isRank,
-    isSuite
+    isSuite,
 };
 

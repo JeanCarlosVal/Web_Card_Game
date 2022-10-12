@@ -3,8 +3,8 @@ const { Card } = require("./Card");
 class Deck {
     constructor(standard52) {
         this.cards = [];
-        this.numCards = 52;
         if (standard52) {
+            this.numCards = 52;
             for (var suite = 1; suite <= 4; suite++) {
                 for (var rank = 1; rank <= 13; rank++) {
                     this.cards.push(new Card(rank, suite));
@@ -15,8 +15,14 @@ class Deck {
     draw() {
         return this.cards.pop();
     }
-    bottomDraw() {
-        this.cards.shift();
+    drawBottom() {
+        return this.cards.shift();
+    }
+    put(c) {
+        this.cards.push(c);
+    }
+    putBottom(c) {
+        this.cards.unshift(c);
     }
     shuffle() {
         for (var i = 0; i < this.cards.length; i++) {
@@ -31,7 +37,7 @@ class Deck {
     // sorts by suite then rank
     sort() {
         this.cards.sort((a, b)=> {
-            return (a.rank + ((a.suite-1) * 13)) - (b.rank + ((b.suite-1) * 13));
+            return a.compareTo(b);
         });
     }
     toString() {
@@ -41,4 +47,8 @@ class Deck {
         }
         return str;
     }
+}
+
+module.exports = {
+    Deck
 }
