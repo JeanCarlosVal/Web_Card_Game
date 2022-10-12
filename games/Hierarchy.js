@@ -48,9 +48,10 @@ const hierarchies = {
 };
 
 // A hierarchy is an ordering of the value of cards for a given game or situation. 
-// Hierarchies allow easy comparison of card values (card values vary game to game).sta
+// Hierarchies allow easy comparison of card values (card values vary game to game).
 // A game can have many hierarchies.
 // To compare card ranks, the Card class has built-in functionality.
+// Note: A card's rank is NOT the card's value. The rank never changes. The value does change.
 class Hierarchy {
     constructor(s) {
         if (hierarchies[s] === undefined) {
