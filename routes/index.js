@@ -1,5 +1,5 @@
 const express = require('express')
-const new_User = require('../models/new_User')
+const User = require('../models/new_User')
 const router = express.Router()
 
 router.get('/',(req,res) => {
@@ -11,7 +11,7 @@ router.get('/sign_in', (req,res) => {
 })
 
 router.get('/sign_up', (req,res) => {
-    res.render('sign_up')
+    res.render('sign_up', { user: new User() })
 })
 
 router.post('/sign_up', async (req,res) => {
@@ -23,12 +23,13 @@ router.post('/sign_up', async (req,res) => {
     })
 
     try{
+        console.log(user)
         const newUser =  await user.save()
-        res.redirect('/sign_in')
+        res.redirect('/')
     } catch {
-        res.render('/sign_up', {
+        res.render('sign_up', {
             user: user,
-            errorMessae: 'Error creating new user'
+            errorMessage: 'Error creating new user'
         })
     }
 })

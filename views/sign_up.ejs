@@ -1,1 +1,14 @@
-This is the sign_up form!!!!
+<h2> New User </h2>
+<% if (locals.errorMessage != null) { %>
+<%= errorMessage %>
+<%}%>
+<form action="/sign_up" method="POST">
+    <label>First Name:</label>
+    <input type="text" name="first_name" value="<%= user.first_name %>">
+    <label> Last Name:</label>
+    <input type="text" name="last_name" value="<%= user.last_name %>">
+    <label> Password:</label>
+    <input type="text" name="password" value="<%= user.password %>">
+    <a href="/">cancel</a>
+    <button type="submit"> Create </button>
+</form>

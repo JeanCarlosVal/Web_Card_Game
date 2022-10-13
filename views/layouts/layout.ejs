@@ -1,18 +1,20 @@
 <!-- this is a layout ejs file that will be used to inject html dynamically -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My App</title>
+    <link rel="stylesheet" href="layout.css">
 </head>
+
 <body>
-    This is the layout
-    <br>
-    <!-- this is the call we used to inject html using the router -->
+    <div class="header arial-font">
+        <h1>Welcome to our Card Games Web App</h1>
+    </div>
     <%- body %> 
-    <br>
-    This is the layout
 </body>
+
 </html>
