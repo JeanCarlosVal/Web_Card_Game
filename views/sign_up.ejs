@@ -3,6 +3,8 @@
 <%= errorMessage %>
 <%}%>
 <form action="/sign_up" method="POST">
+    <label> Username </label>
+    <input type="text" name="username" value="<%= user.username %>">
     <label>First Name:</label>
     <input type="text" name="first_name" value="<%= user.first_name %>">
     <label> Last Name:</label>

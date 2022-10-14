@@ -1,13 +1,14 @@
 //load env variables to process variable in application.
 if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').config()
+    require('dotenv').config({
+        path: './uri.env'
+    })
 }
 
 const express = require('express')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
 const bodyParser = require('body-parser')
-
 const indexRouter = require('./routes/index')
 
 //application set up.
