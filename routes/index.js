@@ -47,6 +47,7 @@ router.post('/sign_up', async (req,res) => {
             const newUser =  await user.save()
             res.redirect('/')
         } catch {
+            //if user did not fill the required fields it will render the same page with an error
             res.render('sign_up', {
                 user: user,
                 errorMessage: 'Error creating new user'
