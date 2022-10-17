@@ -1,8 +1,6 @@
 //load env variables to process variable in application.
 if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').config({
-        path: './uri.env'
-    })
+    require('dotenv').config()
 }
 
 const express = require('express')
