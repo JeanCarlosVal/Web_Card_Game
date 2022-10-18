@@ -9,6 +9,7 @@ const expressLayouts = require('express-ejs-layouts')
 const bodyParser = require('body-parser')
 const indexRouter = require('./routes/index')
 const gamesRouter = require('./routes/games')
+const favicon = require('serve-favicon')
 
 //application set up.
 app.set('view engine','ejs')
@@ -17,6 +18,7 @@ app.set('layout','layouts/layout')
 app.use(expressLayouts)
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ limit : '10mb', extended: false}))
+app.use(favicon(__dirname + '/favicon.ico'))
 
 //database Connection.
 const mongoose = require('mongoose')

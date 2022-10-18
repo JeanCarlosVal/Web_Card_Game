@@ -6,5 +6,10 @@ router.get('/',(req,res) => {
     res.render('games/index')
 })
 
+router.get('/hilo', (req, res) => {
+    console.log(req.url);
+    res.render('games/hilo');
+})
+
 
 module.exports = router
