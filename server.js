@@ -1,6 +1,10 @@
 //load env variables to process variable in application.
 if(process.env.NODE_ENV !== 'production'){
+<<<<<<< HEAD
     require('dotenv').config();
+=======
+    require('dotenv').config()
+>>>>>>> c9960dd0a1d38c68697d8be923190d6617017eb9
 }
 
 const express = require('express')
