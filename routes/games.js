@@ -6,5 +6,8 @@ router.get('/',(req,res) => {
     res.render('games/index')
 })
 
+router.get('/poker', (req,res) => {
+    res.render('games/poker')
+})
 
 module.exports = router
