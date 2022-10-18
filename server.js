@@ -29,4 +29,6 @@ mongoose.connect(process.env.DATABASE_URL, {
 
 app.use('/',indexRouter)
 
-app.listen(process.env.PORT || 3000)
+app.listen(process.env.PORT || 3000, () => {
+    console.log("listening on 'http://localhost:3000'");
+})
