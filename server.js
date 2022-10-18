@@ -1,10 +1,6 @@
 //load env variables to process variable in application.
 if(process.env.NODE_ENV !== 'production'){
-<<<<<<< HEAD
     require('dotenv').config();
-=======
-    require('dotenv').config()
->>>>>>> c9960dd0a1d38c68697d8be923190d6617017eb9
 }
 
 const express = require('express')
@@ -32,5 +28,5 @@ mongoose.connect(process.env.DATABASE_URL, {
 app.use('/',indexRouter)
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log("listening on 'http://localhost:3000'");
+    console.log("listening on 'http://localhost:3000, ctrl + click to open browser'");
 })
