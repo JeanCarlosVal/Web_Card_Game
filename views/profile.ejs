@@ -19,23 +19,26 @@
 
 <!-- Trigger/Open The Modal -->
 <button id="myBtn">Delete Account</button>
+<button id = "change-profile-btn">Edit Profile</button>
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
 
   <!-- Modal content -->
   <div class="modal-content">
-    <span class="close">&times;</span>
     <p>Enter Username and Password to confirm account deletion!</p>
+    <% if (locals.errorMessage != null) { %>
+      <%= errorMessage %>
+      <%}%>
     <form action="/delete_account" method="POST">
         <label for="username">Username</label>
             <input type="text" name="username">
         <label for="password">Password</label>
-            <input type="text" name="username">
+            <input type="text" name="password">
+            <br>
         <button type="submit">Delete Account</button>
-
-
     </form>
+    <button id="go-back-btn">Go Back</button>
   </div>
 
 </div>
@@ -47,6 +50,8 @@ var modal = document.getElementById("myModal");
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
 
+var go_back = document.getElementById("go-back-btn");
+
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
@@ -56,7 +61,7 @@ btn.onclick = function() {
 }
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+go_back.onclick = function() {
   modal.style.display = "none";
 }
 

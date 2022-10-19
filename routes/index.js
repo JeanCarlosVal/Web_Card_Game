@@ -86,6 +86,14 @@ router.post('/sign_in', async (req, res) => {
     }
 });
 
+router.post('/delete_account', async (req, res) => {
+
+res.send('account deleted');
+
+
+
+
+});
 
 
 module.exports = router
