@@ -20,7 +20,7 @@ router.get('/sign_up', (req,res) => {
 router.post('/sign_up', async (req,res) => {
 
     //check if account exists using username, if it does then error message on html form is displayed
-    var accountExists = await User.exists({username: req.body.username})
+    const accountExists = await User.exists({username: req.body.username})
 
      const user = new User({
         username: req.body.username,
@@ -85,5 +85,7 @@ router.post('/sign_in', async (req, res) => {
         res.render('profile', {user: user});
     }
 });
+
+
 
 module.exports = router
