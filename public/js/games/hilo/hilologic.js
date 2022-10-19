@@ -80,5 +80,5 @@ document.getElementById("lower").addEventListener('click', () => {
 });
 
 function gameOver() {
-    document.body.innerHTML = "<p>The game is over because the deck is empty. You got " + numcorrect + " right and " + numwrong + " wrong. Refresh to play again."
+    document.body.innerHTML = "<p>The game is over because the deck is empty. You got " + numcorrect + " right and " + numwrong + " wrong. Refresh to play again.";
 }
