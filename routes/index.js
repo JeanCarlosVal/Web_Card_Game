@@ -38,6 +38,7 @@ router.post('/sign_up', async (req,res) => {
             user: user,
             errorMessage: 'Username ' + req.body.username + ' already exists!'
         })
+
     }
 
     else {
@@ -45,7 +46,7 @@ router.post('/sign_up', async (req,res) => {
         try{
             console.log(user)
             const newUser =  await user.save()
-            res.redirect('/')
+            res.render('profile', {user: user});
         } catch {
             res.render('sign_up', {
                 user: user,
@@ -87,12 +88,15 @@ router.post('/sign_in', async (req, res) => {
 });
 
 router.post('/delete_account', async (req, res) => {
-
-res.send('account deleted');
-
-
-
-
+const toDelete = await User.findOne({username: req.body.username, password: req.body.password });
+console.log(req.body.username)
+if(toDelete) {
+    await User.deleteOne({username: req.body.username});
+    res.redirect('/');
+}
+else {
+    res.redirect('back');
+}
 });
 
 

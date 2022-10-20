@@ -30,11 +30,11 @@
     <% if (locals.errorMessage != null) { %>
       <%= errorMessage %>
       <%}%>
-    <form action="/delete_account" method="POST">
+    <form action="/delete_account" method="POST" onsubmit="">
         <label for="username">Username</label>
             <input type="text" name="username">
         <label for="password">Password</label>
-            <input type="text" name="password">
+            <input type="password" name="password">
             <br>
         <button type="submit">Delete Account</button>
     </form>
