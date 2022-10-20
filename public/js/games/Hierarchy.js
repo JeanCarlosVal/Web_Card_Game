@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import * as cu from '/js/games/CardUtils.js';
 // const cu = require('/js/games/CardUtils.js');
-=======
-// import * as cu from '/js/games/CardUtils.js';
-const cu = require('/js/games/CardUtils.js');
->>>>>>> 7444d281e6f95a04f058ebc8b784b3dc58c6d37c
 
 const aceLow = {
     "A":1,
@@ -99,12 +94,6 @@ class Hierarchy {
 
 export {Hierarchy};
 
-<<<<<<< HEAD
 // module.exports = {
 //     Hierarchy
 // };
-=======
-module.exports = {
-    Hierarchy
-};
->>>>>>> 7444d281e6f95a04f058ebc8b784b3dc58c6d37c
