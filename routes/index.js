@@ -4,6 +4,8 @@ const User = require('../models/new_User')
 const router = express.Router()
 const database = require('./db_functions');
 
+var session;
+
 router.get('/',(req,res) => {
     res.render('index');
 })
@@ -72,6 +74,7 @@ router.post('/sign_in', async (req, res) => {
 
     //otherwise render their profile page with all profile info except their password
     else {
+        session = req.session 
         const user = {
             username: profile.username,
             first_name: profile.first_name,
@@ -81,8 +84,13 @@ router.post('/sign_in', async (req, res) => {
             losses: 0
         }
 
+        session.userId = profile._id
+
         console.log(profile);
         console.log('login successful');
+
+        console.log(session)
+
         res.render('profile', {user: user});
     }
 });
