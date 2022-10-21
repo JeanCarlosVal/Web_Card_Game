@@ -1,5 +1,5 @@
 const express = require('express');
-const { exists } = require('../models/new_User');
+const { exists, findOneAndUpdate } = require('../models/new_User');
 const User = require('../models/new_User')
 const router = express.Router()
 const database = require('./db_functions');
@@ -10,6 +10,10 @@ router.get('/',(req,res) => {
     res.render('index');
 })
 
+router.get('/goodbye', (req, res) => {
+    res.render('goodbye');
+})
+
 router.get('/sign_in', (req,res) => {
     res.render('sign_in')
 })
@@ -17,6 +21,17 @@ router.get('/sign_in', (req,res) => {
 router.get('/sign_up', (req,res) => {
     res.render('sign_up', { user: new User() })
 })
+
+router.get('/profile', (req,res) => {
+    //if user has logged in and cookie isn't expired, they can view profile
+    try {
+    res.render('profile', {user: session.user});
+    }
+    //otherwise they are redirected to the sign in page
+    catch{
+        res.render('sign_in',{errorMessage: "log in to access profile!"});
+    }
+});
 
 
 router.post('/sign_up', async (req,res) => {
@@ -40,7 +55,6 @@ router.post('/sign_up', async (req,res) => {
             user: user,
             errorMessage: 'Username ' + req.body.username + ' already exists!'
         })
-
     }
 
     else {
@@ -48,6 +62,10 @@ router.post('/sign_up', async (req,res) => {
         try{
             console.log(user)
             const newUser =  await user.save()
+            
+            //assign session to this new user and render their new profile
+            session = req.session;
+            session.user = user;
             res.render('profile', {user: user});
         } catch {
             res.render('sign_up', {
@@ -84,28 +102,58 @@ router.post('/sign_in', async (req, res) => {
             losses: 0
         }
 
+        //attach user info to session/cookie, 
+        session.user = user;
         session.userId = profile._id
 
-        console.log(profile);
+        console.log(session.user.username);
         console.log('login successful');
-
-        console.log(session)
-
-        res.render('profile', {user: user});
+        res.redirect('/profile');
     }
 });
 
-router.post('/delete_account', async (req, res) => {
-const toDelete = await User.findOne({username: req.body.username, password: req.body.password });
-console.log(req.body.username)
-if(toDelete) {
-    await User.deleteOne({username: req.body.username});
-    res.redirect('/');
-}
-else {
-    res.redirect('back');
-}
+router.post('/profile', async (req, res) => {
+    //checks to see if that account with user/password exists, if so then it deletes and redirects to home page.
+    const toDelete = await User.exists({username: req.body.username, password: req.body.password });
+    if(toDelete) {
+        await User.deleteOne({username: req.body.username});
+            res.redirect('/goodbye');
+    }
+    //otherwise send back to profile page
+    else {
+        res.render('profile', {user: session.user, errorMessage: "credentials incorrect, cannot delete account!"});
+    }
+
 });
 
+router.post('/edit_account', async(req,res) => {
 
-module.exports = router
+    //setting new to true will return new profile after it's been updated
+    const opts = {new: true};
+
+    //if new password and confirm password match, then change profile info
+    if(req.body.password === req.body.password_confirm) {
+        const updatedAccount = await User.findOneAndUpdate (
+        {
+            "username": session.user.username
+        },
+            {
+            $set: {
+                username: req.body.username,
+                password: req.body.password
+                }
+            },
+            opts
+        )
+
+        //update the cookie's user info to reflect the new user info, then redirect back to /profile
+        session.user=updatedAccount;
+        res.redirect('/profile');
+        }
+
+        //redirect to profile page if passwords don't match
+    else res.redirect('/profile');
+
+});
+
+module.exports = router;
