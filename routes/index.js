@@ -65,7 +65,7 @@ router.post('/sign_up', async (req,res) => {
             
             //assign session to this new user and render their new profile
             session = req.session;
-            session.user = user;
+            session.user = newUser;
             res.render('profile', {user: user});
         } catch {
             res.render('sign_up', {
@@ -103,22 +103,21 @@ router.post('/sign_in', async (req, res) => {
         }
 
         //attach user info to session/cookie, 
-        session.user = user;
-        session.userId = profile._id
+        session.user = profile;
 
-        console.log(session.user.username);
         console.log('login successful');
+        console.log(session.user.username);
         res.redirect('/profile');
     }
 });
 
-router.post('/profile', async (req, res) => {
+router.post('/delete_profile', async (req, res) => {
     //find profile that user entered 
-    const toDelete = await User.findOne({username: req.body.username, password: req.body.password });
+    var toDelete = await User.findOne({username: req.body.username, password: req.body.password });
 
     //if its id matches the one they are logged into, then the profile is deleted
     try{
-    if (toDelete._id.equals(session.userId)) {
+    if (toDelete._id.equals(session.user._id)) {
         await User.deleteOne({username: req.body.username});
             res.redirect('/goodbye');
     }
@@ -137,10 +136,10 @@ router.post('/edit_account', async(req,res) => {
 
     //if new password and confirm password match, then change profile info
     if(req.body.password === req.body.password_confirm) {
-        const updatedAccount = await User.findOneAndUpdate (
+        var updatedAccount = await User.findOneAndUpdate (
         {
             //find user's profile using _id/ObjectId
-            "_id": session.userId
+            "_id": session.user._id
         },
             {
             $set: {
@@ -152,7 +151,7 @@ router.post('/edit_account', async(req,res) => {
         )
 
         //update the cookie's user info to reflect the new user info, then redirect back to /profile
-        session.user=updatedAccount;
+        session.user = updatedAccount;
         res.redirect('/profile');
         }
         else(res.render('profile', {user: session.user}));
