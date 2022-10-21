@@ -113,16 +113,20 @@ router.post('/sign_in', async (req, res) => {
 });
 
 router.post('/profile', async (req, res) => {
-    //checks to see if that account with user/password exists, if so then it deletes and redirects to home page.
-    const toDelete = await User.exists({username: req.body.username, password: req.body.password });
-    if(toDelete) {
+    //find profile that user entered 
+    const toDelete = await User.findOne({username: req.body.username, password: req.body.password });
+
+    //if its id matches the one they are logged into, then the profile is deleted
+    try{
+    if (toDelete._id.equals(session.userId)) {
         await User.deleteOne({username: req.body.username});
             res.redirect('/goodbye');
     }
-    //otherwise send back to profile page
-    else {
-        res.render('profile', {user: session.user, errorMessage: "credentials incorrect, cannot delete account!"});
-    }
+}
+//otherwise send back to profile page
+catch{
+    res.render('profile', {user: session.user, errorMessage: "credentials incorrect, cannot delete account!"});
+}
 
 });
 
@@ -131,11 +135,13 @@ router.post('/edit_account', async(req,res) => {
     //setting new to true will return new profile after it's been updated
     const opts = {new: true};
 
+    try{
     //if new password and confirm password match, then change profile info
     if(req.body.password === req.body.password_confirm) {
         const updatedAccount = await User.findOneAndUpdate (
         {
-            "username": session.user.username
+            //find user's profile using _id/ObjectId
+            "_id": session.userId
         },
             {
             $set: {
@@ -150,9 +156,11 @@ router.post('/edit_account', async(req,res) => {
         session.user=updatedAccount;
         res.redirect('/profile');
         }
-
-        //redirect to profile page if passwords don't match
-    else res.redirect('/profile');
+    }
+    catch{
+        //redirect if passwords didn't match
+        res.render('profile', {user: session.user});
+    }
 
 });
 
