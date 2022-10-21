@@ -135,7 +135,6 @@ router.post('/edit_account', async(req,res) => {
     //setting new to true will return new profile after it's been updated
     const opts = {new: true};
 
-    try{
     //if new password and confirm password match, then change profile info
     if(req.body.password === req.body.password_confirm) {
         const updatedAccount = await User.findOneAndUpdate (
@@ -156,12 +155,7 @@ router.post('/edit_account', async(req,res) => {
         session.user=updatedAccount;
         res.redirect('/profile');
         }
-    }
-    catch{
-        //redirect if passwords didn't match
-        res.render('profile', {user: session.user});
-    }
-
-});
+        else(res.render('profile', {user: session.user}));
+    });
 
 module.exports = router;
