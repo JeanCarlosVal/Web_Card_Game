@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router()
-const database = require('./db_functions');
 
 router.get('/',(req,res) => {
+
+    console.log(req.session)
     res.render('games/index')
 })
 

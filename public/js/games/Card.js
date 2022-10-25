@@ -1,4 +1,4 @@
-import * as cu from '/js/games/CardUtils.js';
+import {toNameRank, toNameSuite } from '/js/games/CardUtils.js';
 // const cu = require('./CardUtils.js');
 
 class Card {
@@ -10,12 +10,12 @@ class Card {
     constructor(rank, suite) {
         // 1-13 or 'A','2','3','4','5','6','7','8','9','10','J','Q','K'
         if (typeof rank == 'number') {
-            this.rank = cu.toNameRank(rank);
+            this.rank = toNameRank(rank);
             this.numericRank = rank;
         }
         else if (typeof rank == 'string') {
             this.rank = rank;
-            this.numericRank = cu.toNumericRank(rank);
+            this.numericRank = toNumericRank(rank);
         }
         else {
             throw new Error("Invalid Rank Type: " + typeof rank);
@@ -23,12 +23,12 @@ class Card {
 
         // 1-4 or 'C','D','H','S'
         if (typeof suite == 'number') {
-            this.suite = cu.toNameSuite(suite);
+            this.suite = toNameSuite(suite);
             this.numericSuite = suite;
         }
         else if (typeof suite == 'string') {
             this.suite = suite;
-            this.numericSuite = cu.toNumericSuite();
+            this.numericSuite = toNumericSuite();
         }
         else {
             throw new Error("Invalid Suite Type: " + typeof suite);
@@ -41,7 +41,7 @@ class Card {
 
     // compares rank, not value
     compareTo(c) {
-        return (this.rank_intToStr(this.rank) + (this.suite_intToStr(this.suite)-1) * 13) - (this.rank_intToStr(c.rank) + (this.suite_intToStr(suite)-1) * 13);
+        return (this.numericRank +  (this.numericSuite-1) * 13) - (c.numericRank + (c.numericSuite-1) * 13);
     }
 }
 

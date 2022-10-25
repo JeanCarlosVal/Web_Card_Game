@@ -1,5 +1,5 @@
-// import * as cu from '/js/games/CardUtils.js';
-const cu = require('/js/games/CardUtils.js');
+import * as cu from '/js/games/CardUtils.js';
+// const cu = require('/js/games/CardUtils.js');
 
 const aceLow = {
     "A":1,
@@ -94,6 +94,6 @@ class Hierarchy {
 
 export {Hierarchy};
 
-module.exports = {
-    Hierarchy
-};
+// module.exports = {
+//     Hierarchy
+// };

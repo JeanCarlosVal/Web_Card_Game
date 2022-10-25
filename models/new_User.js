@@ -31,6 +31,10 @@ const newUserSchema = new mongoose.Schema({
     losses: {
         type: Number,
         required: false,
+    },
+    sessionID: {
+        type: String,
+        required: false
     }
 })
 

@@ -10,6 +10,8 @@ const bodyParser = require('body-parser')
 const indexRouter = require('./routes/index')
 const gamesRouter = require('./routes/games')
 const favicon = require('serve-favicon')
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
 
 //application set up.
 app.set('view engine','ejs')
@@ -19,6 +21,17 @@ app.use(expressLayouts)
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ limit : '10mb', extended: false}))
 app.use(favicon(__dirname + '/favicon.ico'))
+app.use(cookieParser());
+
+//Session set up 
+const oneDay = 1000 * 60 * 60 * 24; // one day duration for cookie to expire
+
+app.use(sessions({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
 
 //database Connection.
 const mongoose = require('mongoose')
