@@ -1,3 +1,7 @@
+<% if (locals.errorMessage != null) { %>
+  <%= errorMessage %>
+  <%}%>
+
 <h1> <%= user.username %></h1>
 <table>
     <tr>
@@ -17,4 +21,65 @@
     </tr>
 </table>
 
-<a href="/delete_account">Delete Your Account</a>
+<!-- buttons open account edit or accoutn delete modals -->
+<button id="delete-btn" class="profile-btn" onclick="show(delete_modal)">Delete Account</button>
+<button id = "edit-profile-btn" class="profile-btn" onclick="show(edit_modal)"> Edit Profile </button>
+
+
+<!-- Modal for account deletion -->
+<div id="delete-modal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    Enter Account Credentials To Delete Account
+    <form action="/delete_profile" method="POST">
+        <label for="username">Username</label>
+            <input type="text" name="username">
+        <label for="password">Password</label>
+            <input type="password" name="password">
+            <br>
+        <button type="submit">Delete Account</button>
+    </form>
+    <button id="go-back" class="profile-btn" onclick="hide(delete_modal)">Go Back</button>
+  </div>
+</div>
+
+<!-- Modal for editing profile info -->
+<div id="edit-modal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <form action="/edit_account" method="POST">
+        <label for="username">Username</label>
+            <input type="text" name="username">
+        <label for="password">New Password</label>
+            <input type="text" name="password">
+        <label for="password-confirm">Confirm New Password</label>
+            <input type="text" name="password_confirm">
+            <br>
+        <button type="submit">Edit Account</button>
+    </form>
+    <button id="go-back" class="profile-btn" onclick="hide(edit_modal)">Go Back</button>
+  </div>
+</div>
+
+<script>
+  
+  var delete_modal = document.getElementById("delete-modal");
+  var edit_modal = document.getElementById("edit-modal");
+
+  function show(modal){
+    modal.style.display='block';
+  }
+
+  function hide(modal){
+    modal.style.display='none';
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = (event) => {
+    if (event.target == delete_modal || event.target == edit_modal) {
+      delete_modal.style.display = "none";
+      edit_modal.style.display = "none";
+  }
+  }
+
+</script>
