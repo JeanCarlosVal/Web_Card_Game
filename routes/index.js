@@ -1,7 +1,11 @@
+const { application } = require('express');
 const express = require('express');
+const app = express();
+const { Session } = require('express-session');
 const { exists, findOneAndUpdate } = require('../models/new_User');
 const User = require('../models/new_User')
 const router = express.Router()
+app.use(express.json());
 
 var session;
 var authenticated;
@@ -169,6 +173,10 @@ router.post('/logout', (req, res) => {
         });
     }
     res.redirect('/');
+})
+router.post('/game_results', (req, res) => {
+console.log(res.json({requestBody: req.body}));
+res.send('it works');
 })
 
 module.exports = router;

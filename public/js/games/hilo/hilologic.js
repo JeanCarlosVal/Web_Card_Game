@@ -82,6 +82,7 @@ document.getElementById("lower").addEventListener('click', () => {
 function gameOver() {
     const xhr = new XMLHttpRequest();
     xhr.open('post','/game_results');
+    xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send({win:false, game:'hilo'});
     document.body.innerHTML = "<p>The game is over because the deck is empty. You got " + numcorrect + " right and " + numwrong + " wrong. Refresh to play again.";
 }
