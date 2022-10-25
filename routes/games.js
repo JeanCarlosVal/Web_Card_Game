@@ -8,7 +8,6 @@ router.get('/',(req,res) => {
 })
 
 router.get('/hilo', (req, res) => {
-    console.log(req.body.win)
     res.render('games/hilo');
 })
 
