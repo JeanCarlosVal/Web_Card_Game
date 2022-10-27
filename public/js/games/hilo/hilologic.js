@@ -16,6 +16,7 @@ var numWrongDisp = document.getElementById("numwrong");
 var numCorrectDisp = document.getElementById("numcorrect");
 
 getNewCard();
+gameOver();
 
 // prepare for next guess
 function getNewCard() {
@@ -82,6 +83,11 @@ document.getElementById("lower").addEventListener('click', () => {
 function gameOver() {
     const xhr = new XMLHttpRequest();
     xhr.open('post','/game_results');
-    xhr.send({'win': false, 'game': 'hilo'});
+    if (numcorrect > numcorrect) {
+        xhr.send({'win':1, 'game': 'hilo'});
+    }
+    else {
+        xhr.send({'win':0, 'game': 'hilo'});
+    }
     document.body.innerHTML = "<p>The game is over because the deck is empty. You got " + numcorrect + " right and " + numwrong + " wrong. Refresh to play again.";
 }
