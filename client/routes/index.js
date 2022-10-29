@@ -1,5 +1,4 @@
 const express = require('express');
-const { exists, findOneAndUpdate } = require('../models/new_User');
 const User = require('../models/new_User')
 const router = express.Router()
 

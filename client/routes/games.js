@@ -8,9 +8,11 @@ router.get('/',(req,res) => {
 })
 
 router.get('/hilo', (req, res) => {
-    console.log(req.url);
     res.render('games/hilo');
 })
 
+router.get('/poker', (req,res) => {
+    res.render('games/poker')
+})
 
 module.exports = router
