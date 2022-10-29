@@ -3,7 +3,7 @@ import {Hierarchy} from '/js/games/Hierarchy.js';
 
 console.log("HiLoLogic is here!");
 
-const deck = new Deck(true);
+const deck = new Deck('standard52');
 var base = undefined; 
 deck.shuffle();
 
@@ -80,5 +80,8 @@ document.getElementById("lower").addEventListener('click', () => {
 });
 
 function gameOver() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('post','/game_results');
+    xhr.send({win:false, game:'hilo'});
     document.body.innerHTML = "<p>The game is over because the deck is empty. You got " + numcorrect + " right and " + numwrong + " wrong. Refresh to play again.";
 }
