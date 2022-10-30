@@ -12,6 +12,7 @@ const gamesRouter = require('./routes/games')
 const favicon = require('serve-favicon')
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
+
 //application set up.
 app.set('view engine','ejs')
 app.set('views',__dirname + '/views')
