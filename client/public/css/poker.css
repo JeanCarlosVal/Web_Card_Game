@@ -125,6 +125,7 @@
     width: 100px;
     height: 30px;
     border: 0;
+    bottom: 3rem;
 }
 
 .fold-button:hover {
@@ -153,6 +154,7 @@
     width: 200px;
     height: 30px;
     border: 0;
+    bottom: 5rem;
 }
 
 .check-button:hover {
@@ -181,6 +183,7 @@
     width: 100px;
     height: 30px;
     border: 0;
+    bottom: 3rem;
 }
 
 .raise-button:hover {
@@ -188,9 +191,11 @@
 }
 
 .user-options{
-    position: absolute;
-    bottom: 0;
+    position: relative;
+    bottom: 10rem;
     left: 8.5rem;
+    width: 0%;
+    height: 0%;
 }
 
 .slidecontainer {

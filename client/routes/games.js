@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router()
+const router = express.Router();
 
 router.get('/',(req,res) => {
 
@@ -14,5 +14,6 @@ router.get('/hilo', (req, res) => {
 router.get('/poker', (req,res) => {
     res.render('games/poker')
 })
+
 
 module.exports = router
