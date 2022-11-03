@@ -141,8 +141,8 @@ router.post('/delete_profile', async (req, res) => {
     }
 });
 
-router.post('/edit_account', async(req,res) => {
 
+router.post('/edit_account', async(req,res) => {
     //setting new to true will return profile after it's been updated
     const opts = {new: true};
 
@@ -179,13 +179,16 @@ router.post('/logout', (req, res) => {
     }
     res.redirect('/');
 })
+
+//endpoint to update user game stats when games end 
 router.post('/game_results', async (req, res) => {
     let obj = req.body;
-    let variable;
+    let result_field;
     let game = obj.game;
-    console.log(game);
-    //(obj.win == 1) ? wins = 1: losses = 1;
-    (obj.win == 1) ? variable = "wins" : variable = "losses";
+    (obj.win === 1) ? result_field = "wins" : result_field = "losses";
+
+    //string for game/win-loss field of user
+    let game_result = [game] + "." + [result_field];
 
       const opts = {new: true};
           var updatedAccount = await User.findOneAndUpdate (
@@ -193,11 +196,12 @@ router.post('/game_results', async (req, res) => {
               //find user's profile using sessionID
               "sessionID": obj.sessionID
           },
-              {
 
+              {
+                //increment total wins, the user's game win/loss tally, and total games played 
               $inc: {
-                  [variable]: 1,
-                  "hi_lo.wins": 1,
+                  [result_field]: 1,
+                  [game_result]: 1,
                   games_played: 1
                   }
                 }
@@ -209,9 +213,6 @@ router.post('/game_results', async (req, res) => {
           //session.user = updatedAccount;
           console.log(updatedAccount)
           res.redirect('/profile');
-          
-            })
-
-   // res.send('hi');
+            });
 
 module.exports = router;

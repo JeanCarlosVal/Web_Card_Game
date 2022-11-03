@@ -79,9 +79,10 @@ document.getElementById("lower").addEventListener('click', () => {
     updateNums();
 });
 
+//set win to 0 or 1 depending on if game result is a loss(0) or win(1);
 function gameOver() {
     const xhr = new XMLHttpRequest();
     xhr.open('post','/game_results');
-    xhr.send({'win': false, 'game': 'hi_lo', 'sessionID': sessionID});
+    xhr.send({'win': 0, 'game': 'hi_lo', 'sessionID': sessionID});
     document.body.innerHTML = "<p>The game is over because the deck is empty. You got " + numcorrect + " right and " + numwrong + " wrong. Refresh to play again.";
 }
