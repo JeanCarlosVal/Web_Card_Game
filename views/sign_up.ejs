@@ -4,13 +4,13 @@
 <%}%>
 <form action="/sign_up" method="POST">
     <label> Username </label>
-    <input type="text" name="username" value="<%= user.username %>">
+    <input type="text" name="username">
     <label>First Name:</label>
-    <input type="text" name="first_name" value="<%= user.first_name %>">
+    <input type="text" name="first_name">
     <label> Last Name:</label>
-    <input type="text" name="last_name" value="<%= user.last_name %>">
+    <input type="text" name="last_name">
     <label> Password:</label>
-    <input type="text" name="password" value="<%= user.password %>">
+    <input type="text" name="password">
     <a href="/">cancel</a>
     <button type="submit"> Create </button>
 </form>

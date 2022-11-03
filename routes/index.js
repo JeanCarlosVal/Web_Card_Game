@@ -62,6 +62,11 @@ router.post('/sign_up', async (req,res) => {
         date_of_birth: req.body.date_of_birth,
         wins: 0,
         losses: 0,
+        games_played: 0,
+        hi_lo: {
+            wins: 0,
+            losses: 0,
+        }
         });
 
         try{
@@ -175,15 +180,38 @@ router.post('/logout', (req, res) => {
     res.redirect('/');
 })
 router.post('/game_results', async (req, res) => {
-    var win = 0;
-    var loss = 0;
+    let obj = req.body;
+    let variable;
+    let game = obj.game;
+    console.log(game);
+    //(obj.win == 1) ? wins = 1: losses = 1;
+    (obj.win == 1) ? variable = "wins" : variable = "losses";
 
-    //(req.body.win) ? win = 1 : loss =1 ;
-    console.log(win)
-    console.log(loss);
-    res.send('hi');
+      const opts = {new: true};
+          var updatedAccount = await User.findOneAndUpdate (
+          {
+              //find user's profile using sessionID
+              "sessionID": obj.sessionID
+          },
+              {
 
-})
+              $inc: {
+                  [variable]: 1,
+                  "hi_lo.wins": 1,
+                  games_played: 1
+                  }
+                }
+              ,
+              opts
+          )
+  
+          //update the cookie's user info to reflect the new user info, then redirect back to /profile
+          //session.user = updatedAccount;
+          console.log(updatedAccount)
+          res.redirect('/profile');
+          
+            })
 
+   // res.send('hi');
 
 module.exports = router;
