@@ -210,7 +210,7 @@ router.post('/game_results', async (req, res) => {
           )
   
           //update the cookie's user info to reflect the new user info, then redirect back to /profile
-          //session.user = updatedAccount;
+          session.user = updatedAccount;
           console.log(updatedAccount)
           res.redirect('/profile');
             });
