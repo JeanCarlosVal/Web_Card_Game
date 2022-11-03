@@ -32,6 +32,17 @@ const newUserSchema = new mongoose.Schema({
         type: Number,
         required: false,
     },
+    games_played: {
+        type: Number,
+        required: false
+    },
+
+    hi_lo: {
+        wins: Number, 
+        required: false,
+        losses: Number,
+        required: false
+    },
     sessionID: {
         type: String,
         required: false

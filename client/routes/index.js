@@ -1,6 +1,8 @@
+const { application } = require('express');
 const express = require('express');
 const User = require('../models/new_User')
 const router = express.Router()
+//app.use(express.json());
 
 var session;
 var authenticated;
@@ -57,6 +59,11 @@ router.post('/sign_up', async (req,res) => {
         date_of_birth: req.body.date_of_birth,
         wins: 0,
         losses: 0,
+        games_played: 0,
+        hi_lo: {
+            wins: 0,
+            losses: 0,
+        }
         });
 
         try{
@@ -131,8 +138,8 @@ router.post('/delete_profile', async (req, res) => {
     }
 });
 
-router.post('/edit_account', async(req,res) => {
 
+router.post('/edit_account', async(req,res) => {
     //setting new to true will return profile after it's been updated
     const opts = {new: true};
 
@@ -169,5 +176,42 @@ router.post('/logout', (req, res) => {
     }
     res.redirect('/');
 })
+
+//endpoint to update user game stats when games end 
+router.post('/game_results', async (req, res) => {
+    let obj = req.body;
+    let result_field;
+    let game = obj.game;
+    (obj.wins == 1) ? result_field = "wins" : result_field = "losses";
+
+    //string for game/win-loss field of user
+    let game_result = [game] + "." + [result_field];
+    console.log(result_field);
+    console.log(game_result);
+
+      const opts = {new: true};
+          var updatedAccount = await User.findOneAndUpdate (
+          {
+              //find user's profile using sessionID
+              "sessionID": obj.sessionID
+          },
+
+              {
+                //increment total wins, the user's game win/loss tally, and total games played 
+              $inc: {
+                  [result_field]: 1,
+                  [game_result]: 1,
+                  games_played: 1
+                  }
+                }
+              ,
+              opts
+          )
+  
+          //update the cookie's user info to reflect the new user info, then redirect back to /profile
+          //session.user = updatedAccount;
+          console.log(updatedAccount)
+          res.redirect('/profile');
+            });
 
 module.exports = router;
