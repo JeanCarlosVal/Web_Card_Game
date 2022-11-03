@@ -185,10 +185,12 @@ router.post('/game_results', async (req, res) => {
     let obj = req.body;
     let result_field;
     let game = obj.game;
-    (obj.win === 1) ? result_field = "wins" : result_field = "losses";
+    (obj.wins == 1) ? result_field = "wins" : result_field = "losses";
 
     //string for game/win-loss field of user
     let game_result = [game] + "." + [result_field];
+    console.log(result_field);
+    console.log(game_result);
 
       const opts = {new: true};
           var updatedAccount = await User.findOneAndUpdate (
@@ -210,7 +212,7 @@ router.post('/game_results', async (req, res) => {
           )
   
           //update the cookie's user info to reflect the new user info, then redirect back to /profile
-          session.user = updatedAccount;
+          //session.user = updatedAccount;
           console.log(updatedAccount)
           res.redirect('/profile');
             });
