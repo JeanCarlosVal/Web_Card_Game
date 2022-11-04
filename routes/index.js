@@ -185,5 +185,12 @@ router.post('/game_results', async (req, res) => {
 
 })
 
+router.get('/realtime', (req, res) => {
+    res.render('realtime');
+})
+
+router.get('/slap', (req, res) => {
+    res.render('slap');
+})
 
 module.exports = router;

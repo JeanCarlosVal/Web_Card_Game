@@ -1,0 +1,65 @@
+<button id="join-lobby">Join Random Lobby</button>
+<button id="create-lobby">Create Lobby</button>
+<button id="leave-lobby">Leave Lobby</button>
+
+<ul id="updates">UPDATES</ul>
+
+<button id="slap">SLAP!</button>
+<button id="play">next card</button>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io("/slap");
+
+    var isTurn = false;
+
+    var jlb = document.getElementById("join-lobby");
+    var clb = document.getElementById("create-lobby");
+    var llb = document.getElementById("leave-lobby");
+    var updates = document.getElementById("updates");
+
+    jlb.addEventListener('click', (e) => {
+        // e.preventDefault();
+        socket.emit('join-random-lobby', {nope:null});
+    });
+
+    clb.addEventListener('click', (e) => {
+        e.preventDefault();
+        socket.emit('create-lobby');
+    });
+
+    llb.addEventListener('click', (e) => {
+        e.preventDefault();
+        socket.emit('leave-lobby');
+    });
+
+    socket.on('successful-join', (pkg) => {
+        var upd = document.createElement("li");
+        upd.innerText = pkg.message;
+        updates.appendChild(upd);
+    });
+
+
+    var slap = document.getElementById("slap");
+    var play = document.getElementById("play");
+
+    slap.addEventListener('click', (e) => {
+        e.preventDefault();
+        socket.emit('play', {
+            action:'slap',
+            slapper:'',
+            lobby:''
+        });
+    });
+
+    play.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isTurn) {
+            socket.emit('play', {
+                action:'play',
+                player:'',
+                lobby:''
+            });
+        }
+    });
+
+</script>

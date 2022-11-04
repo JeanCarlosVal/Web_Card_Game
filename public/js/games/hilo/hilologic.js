@@ -10,13 +10,10 @@ deck.shuffle();
 var numcorrect = 0;
 var numwrong = 0;
 
-var basedisplay = document.getElementById("basedisplay");
-var challengedisplay = document.getElementById("challengedisplay");
 var numWrongDisp = document.getElementById("numwrong");
 var numCorrectDisp = document.getElementById("numcorrect");
 
 getNewCard();
-gameOver();
 
 // prepare for next guess
 function getNewCard() {

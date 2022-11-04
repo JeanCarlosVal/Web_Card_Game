@@ -3,6 +3,7 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }
 
+const http = require('http')
 const express = require('express')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
@@ -44,6 +45,26 @@ mongoose.connect(process.env.DATABASE_URL, {
 app.use('/',indexRouter)
 app.use('/games', gamesRouter)
 
-app.listen(process.env.PORT || 3000, () => {
+// Server Creation
+const server = http.createServer(app);
+
+server.listen(process.env.PORT || 3000, () => {
     console.log("listening on 'http://localhost:3000, ctrl + click to open browser'");
 })
+
+// ------------------------------------
+// real-time connections with socket.io
+// ------------------------------------
+
+const {Server} = require('socket.io');
+var io = new Server(server);
+
+const messager = require('./scripts/attachments/messager.js');
+const messagernsp = io.of('/realtime');
+messagernsp.on('connection', (socket) => {messager.onConnect(socket, messagernsp);});
+
+
+
+const slap = require('./scripts/attachments/slap-attachment.js');
+const slapnsp = io.of('/slap');
+slapnsp.on('connection', (socket) => {slap.onConnect(socket, slapnsp);});
