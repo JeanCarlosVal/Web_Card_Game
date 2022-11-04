@@ -26,7 +26,7 @@ raise.addEventListener("click", e => {
     poker.emit("player-raise")
 })
 
-var joinroom = document.getElementById("joinRoom")
+var joinroom = document.getElementById("createRoom")
 var seerooms = document.getElementById("rooms")
 
 joinroom.addEventListener("click", e =>{
@@ -36,11 +36,12 @@ joinroom.addEventListener("click", e =>{
 })
 
 seerooms.addEventListener("click", e => {
-    poker.emit("see-rooms", )
+    poker.emit("see-rooms" )
     document.getElementById("available-rooms").innerHTML = "";
 })
 
-poker.on("fetched-rooms", rooms => {
+poker.on("fetched-rooms", response => {
+    var rooms = Array.from(response)
     console.log(rooms)
 
     rooms.forEach(element => {
@@ -48,10 +49,16 @@ poker.on("fetched-rooms", rooms => {
     });
 })
 
-poker.on('is-room-available', (availability, room) => {
+poker.on('is-room-available', (availability, room, size) => {
     if(availability){
         var p = document.createElement('p')
-        p.innerText = room
+        p.innerText = room + " current players: " + size
+        p.className = 'room-name'
         document.getElementById("available-rooms").appendChild(p)
+        var button = document.createElement('button')
+        button.id = room
+        button.className = 'join-room-button'
+        document.getElementById("available-rooms").appendChild(button)
     }
 })
+

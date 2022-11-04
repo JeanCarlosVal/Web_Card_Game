@@ -297,7 +297,7 @@
     border-radius: 10px;
 }
 
-.player1-info{
+.player1-info {
     position: relative;
     width: 10rem;
     height: 5rem;
@@ -305,7 +305,7 @@
     top: 5rem;
 }
 
-.player2-info{
+.player2-info {
     position: relative;
     width: 10rem;
     height: 5rem;
@@ -313,16 +313,16 @@
     bottom: 5rem;
 }
 
-.player3-info{
+.player3-info {
     position: relative;
     width: 10rem;
     height: 5rem;
     top: 5.7rem;
     left: 1rem;
-    
+
 }
 
-.player4-info{
+.player4-info {
     position: relative;
     width: 10rem;
     height: 5rem;
@@ -330,7 +330,7 @@
     left: 1rem;
 }
 
-.player5-info{
+.player5-info {
     position: relative;
     width: 10rem;
     height: 5rem;
@@ -338,10 +338,85 @@
     bottom: 5.3rem;
 }
 
-.player6-info{
+.player6-info {
     position: relative;
     width: 10rem;
     height: 5rem;
     right: 1rem;
     top: 5.3rem;
+}
+
+.game {
+    display: none;
+}
+
+.room-name {}
+
+.join-room-button {}
+
+.createRoomDisplay {
+    display: block;
+    margin-left: 5rem;
+    margin-top: 2rem;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+}
+
+.createRoomDisplay p {
+    font-size: 30px;
+}
+
+.createRoomDisplay button {
+    background: #06c857;
+    border-radius: 11px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    justify-content: center;
+    padding-top: .2em;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 200px;
+    height: 30px;
+    border: 0;
+}
+
+.createRoomDisplay input {
+    width: 20%;
+    height: 30px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-right: 40rem;
+    padding: 12px;
+}
+
+.rooms-table {
+    margin-top: 5rem;
+    margin-left: 5rem;
+    margin-right: 10rem;
+}
+
+.rooms-table table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 2px;
+}
+
+.rooms-table td,
+th {
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+.rooms-table td {
+    padding-left: 3rem;
+}
+
+.rooms-table tr:nth-child(even) {
+    background-color: #dddddd;
 }

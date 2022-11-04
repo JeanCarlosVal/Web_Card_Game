@@ -19,23 +19,26 @@ pokerIo.on("connection" , socket => {
     socket.on("join-room" , room => {
         socket.join(room)
         console.log("joined room: " + room)
+        
     })
 
     socket.on("see-rooms", eval => {
         const rooms = Array.from(io.of("/poker").adapter.rooms.keys())
+        console.log(io.of("/poker").adapter.rooms)
 
-        pokerIo.emit('fetched-rooms', rooms)
+        socket.emit('fetched-rooms', rooms)
     })
 
     socket.on("check-room", room => {
         const map = io.of("/poker").adapter.rooms
         const users = Array.from(map.get(room))
+        const roomSize = users.length
         console.log(room)
 
         if(users.length > 6){
-            pokerIo.emit('is-room-available', false, room)
+            socket.emit('is-room-available', false, room, roomSize)
         }else{
-            pokerIo.emit('is-room-available', true, room)
+            socket.emit('is-room-available', true, room, roomSize)
         }
     })
 })
