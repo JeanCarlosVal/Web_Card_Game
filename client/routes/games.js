@@ -16,5 +16,9 @@ router.get('/hilo', async (req, res) => {
     res.render('games/hilo');
 });
 
+router.get('/poker', (req,res) => {
+    res.render('games/poker')
+})
+
 
 module.exports = router;
