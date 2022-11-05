@@ -1,8 +1,8 @@
 .table {
     margin-left: auto;
     margin-right: auto;
-    width: 800px;
-    height: 400px;
+    width: 900px;
+    height: 450px;
     background: #a84909;
     border-radius: 200px;
     margin-top: 5rem;
@@ -13,17 +13,17 @@
     position: relative;
     width: 100px;
     height: 100px;
-    border: 5px solid black;
+    border: 5px solid grey;
     background-color: black;
     border-radius: 100px;
 }
 
 .player2 {
     position: relative;
-    top: 11.5rem;
+    top: 14.5rem;
     width: 100px;
     height: 100px;
-    border: 5px solid black;
+    border: 5px solid grey;
     background-color: black;
     border-radius: 100px;
 }
@@ -32,10 +32,10 @@
     position: relative;
     width: 100px;
     height: 100px;
-    border: 5px solid black;
+    border: 5px solid grey;
     background-color: black;
-    left: 21rem;
-    bottom: 15.5rem;
+    left: 24rem;
+    bottom: 15.8rem;
     border-radius: 100px;
 }
 
@@ -43,10 +43,10 @@
     position: relative;
     width: 100px;
     height: 100px;
-    border: 5px solid black;
+    border: 5px solid grey;
     background-color: black;
-    left: 21rem;
-    top: 2.5rem;
+    left: 24rem;
+    top: 5rem;
     border-radius: 100px;
 }
 
@@ -54,10 +54,10 @@
     position: relative;
     width: 100px;
     height: 100px;
-    border: 5px solid black;
+    border: 5px solid grey;
     background-color: black;
-    left: 42rem;
-    bottom: 7rem;
+    left: 48.5rem;
+    bottom: 4rem;
     border-radius: 100px;
 }
 
@@ -65,9 +65,9 @@
     position: relative;
     width: 100px;
     height: 100px;
-    border: 5px solid black;
+    border: 5px solid grey;
     background-color: black;
-    left: 42rem;
+    left: 48.5rem;
     bottom: 31.5rem;
     border-radius: 100px;
 }
@@ -125,6 +125,7 @@
     width: 100px;
     height: 30px;
     border: 0;
+    bottom: 3rem;
 }
 
 .fold-button:hover {
@@ -153,6 +154,7 @@
     width: 200px;
     height: 30px;
     border: 0;
+    bottom: 5rem;
 }
 
 .check-button:hover {
@@ -181,16 +183,19 @@
     width: 100px;
     height: 30px;
     border: 0;
+    bottom: 3rem;
 }
 
 .raise-button:hover {
     background: #e0a02a;
 }
 
-.user-options{
-    position: absolute;
-    bottom: 0;
+.user-options {
+    position: relative;
+    bottom: 10rem;
     left: 8.5rem;
+    width: 0%;
+    height: 0%;
 }
 
 .slidecontainer {
@@ -198,9 +203,9 @@
     width: 20rem;
     left: 36.5rem;
     bottom: 1rem;
-  }
-  
-  .slider {
+}
+
+.slider {
     -webkit-appearance: none;
     width: 100%;
     height: 15px;
@@ -210,13 +215,13 @@
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
-  }
-  
-  .slider:hover {
+}
+
+.slider:hover {
     opacity: 1;
-  }
-  
-  .slider::-webkit-slider-thumb {
+}
+
+.slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 25px;
@@ -224,12 +229,194 @@
     border-radius: 50%;
     background: #04AA6D;
     cursor: pointer;
-  }
-  
-  .slider::-moz-range-thumb {
+}
+
+.slider::-moz-range-thumb {
     width: 25px;
     height: 25px;
     border-radius: 50%;
     background: #04AA6D;
     cursor: pointer;
-  }
+}
+
+.deck-of-cards {
+    position: relative;
+    width: 33rem;
+    height: 10rem;
+    bottom: 29rem;
+    left: 11rem;
+}
+
+.table-card-1 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 150px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.table-card-2 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 150px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.table-card-3 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 150px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.table-card-4 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 150px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.table-card-5 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 150px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.player1-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    left: 3rem;
+    top: 5rem;
+}
+
+.player2-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    left: 3rem;
+    bottom: 5rem;
+}
+
+.player3-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    top: 5.7rem;
+    left: 1rem;
+
+}
+
+.player4-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    bottom: 5.4rem;
+    left: 1rem;
+}
+
+.player5-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    right: 1rem;
+    bottom: 5.3rem;
+}
+
+.player6-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    right: 1rem;
+    top: 5.3rem;
+}
+
+.game {
+    display: none;
+}
+
+.room-name {}
+
+.join-room-button {}
+
+.createRoomDisplay {
+    display: block;
+    margin-left: 5rem;
+    margin-top: 2rem;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+}
+
+.createRoomDisplay p {
+    font-size: 30px;
+}
+
+.createRoomDisplay button {
+    background: #06c857;
+    border-radius: 11px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    justify-content: center;
+    padding-top: .2em;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 200px;
+    height: 30px;
+    border: 0;
+}
+
+.createRoomDisplay input {
+    width: 20%;
+    height: 30px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-right: 40rem;
+    padding: 12px;
+}
+
+.rooms-table {
+    margin-top: 5rem;
+    margin-left: 5rem;
+    margin-right: 10rem;
+}
+
+.rooms-table table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 2px;
+}
+
+.rooms-table td,
+th {
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+.rooms-table td {
+    padding-left: 3rem;
+}
+
+.rooms-table tr:nth-child(even) {
+    background-color: #dddddd;
+}

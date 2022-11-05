@@ -12,22 +12,13 @@ const gamesRouter = require('./routes/games')
 const favicon = require('serve-favicon')
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
-const io = require('socket.io-client')
-
-//Websocket server connection
-const socket = io("http://localhost:8080")
-
-//prove you are connected to websocket server
-socket.on("connect", () => {
-    console.log("You are connected with room-id: " + socket.id )
-})
 
 //application set up.
 app.set('view engine','ejs')
 app.set('views',__dirname + '/views')
 app.set('layout','layouts/layout')
 app.use(expressLayouts)
-app.use(express.static('client'))
+app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ limit : '10mb', extended: false}))
 app.use(favicon(__dirname + '/favicon.ico'))
 app.use(cookieParser());
