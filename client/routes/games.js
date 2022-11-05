@@ -1,19 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const io = require('socket.io-client')
+const User = require('../models/new_User');
 
 router.get('/',(req,res) => {
-
     console.log(req.session)
     res.render('games/index')
 })
 
-router.get('/hilo', (req, res) => {
+router.get('/hilo', async (req, res) => {
+    //get all users
+   let userList = await User.find({});
+   console.log(userList);
+
     res.render('games/hilo');
-})
+});
 
 router.get('/poker', (req,res) => {
     res.render('games/poker')
 })
 
-module.exports = router
+
+module.exports = router;
