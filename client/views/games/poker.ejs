@@ -1,6 +1,15 @@
 <script type="module" src="/js/games/poker/poker.js"></script>
 <link rel="stylesheet" href="./public/css/poker.css">
 
+<div class="leaderboard">
+    <table>
+        <tr><h3>Poker Wins Leaders</h3></tr>
+        <% for (var i = 0; i < leaders.length; i++) { %>
+            <tr> <td><%= leaders[i].username %></td> <td><%= leaders[i].poker.wins %> <td></tr>
+        <% } %>
+</table>
+</div>
+
 <div class="createRoomDisplay">
     <p>Create a room or join an available room</p>
     <button id="createRoom"> Create Room </button>

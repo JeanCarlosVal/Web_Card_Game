@@ -43,6 +43,14 @@ const newUserSchema = new mongoose.Schema({
         losses: Number,
         required: false
     },
+
+    poker: {
+        wins: Number,
+        required: false,
+        losses: Number,
+        required: false
+    },
+    
     sessionID: {
         type: String,
         required: false
