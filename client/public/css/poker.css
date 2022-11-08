@@ -16,6 +16,7 @@
     border: 5px solid grey;
     background-color: black;
     border-radius: 100px;
+    visibility: hidden;
 }
 
 .player2 {
@@ -26,6 +27,7 @@
     border: 5px solid grey;
     background-color: black;
     border-radius: 100px;
+    visibility: hidden;
 }
 
 .player3 {
@@ -37,6 +39,7 @@
     left: 24rem;
     bottom: 15.8rem;
     border-radius: 100px;
+    visibility: hidden;
 }
 
 .player4 {
@@ -48,6 +51,7 @@
     left: 24rem;
     top: 5rem;
     border-radius: 100px;
+    visibility: hidden;
 }
 
 .player5 {
@@ -59,6 +63,7 @@
     left: 48.5rem;
     bottom: 4rem;
     border-radius: 100px;
+    visibility: hidden;
 }
 
 .player6 {
@@ -70,6 +75,7 @@
     left: 48.5rem;
     bottom: 31.5rem;
     border-radius: 100px;
+    visibility: hidden;
 }
 
 .userpokertemplate {
@@ -350,9 +356,27 @@
     display: none;
 }
 
-.room-name {}
-
-.join-room-button {}
+.join-room-button {
+    background: #06c857;
+    border-radius: 11px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    justify-content: center;
+    padding-top: .2em;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 200px;
+    height: 30px;
+    border: 0;
+    position: relative;
+    left: 32%;
+}
 
 .createRoomDisplay {
     display: block;
@@ -418,5 +442,5 @@ th {
 }
 
 .rooms-table tr:nth-child(even) {
-    background-color: #dddddd;
+    background-color: #afaeae;
 }
