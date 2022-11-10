@@ -7,11 +7,11 @@ router.get('/',(req,res) => {
     res.render('games/index')
 })
 
-router.get('/hilo', async (req, res) => {
+router.get('/hilo',(req, res) => {
     res.render('games/hilo');
 });
 
-router.get('/poker', async (req,res) => {
+router.get('/poker',(req,res) => {
     res.render('games/poker');
 })
 
