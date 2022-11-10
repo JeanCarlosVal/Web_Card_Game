@@ -2,7 +2,6 @@ const { application } = require('express');
 const express = require('express');
 const User = require('../models/new_User')
 const router = express.Router()
-//app.use(express.json());
 
 var session;
 var authenticated;
