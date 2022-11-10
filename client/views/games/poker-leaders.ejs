@@ -1,0 +1,8 @@
+<div class="leaderboard">
+    <table>
+        <tr><h3>Poker Wins Leaders</h3></tr>
+        <% for (var i = 0; i < leaders.length; i++) { %>
+            <tr> <td><%= leaders[i].username %></td> <td><%= leaders[i].poker.wins %> <td></tr>
+        <% } %>
+</table>
+</div>

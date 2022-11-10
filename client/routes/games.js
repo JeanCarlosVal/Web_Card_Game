@@ -16,9 +16,13 @@ router.get('/hilo', async (req, res) => {
 
 router.get('/poker', async (req,res) => {
     let pokerLeaders = await User.find().sort({"poker.wins" : -1}).limit(5);
-    console.log(pokerLeaders);
-     res.render('games/poker', {leaders: pokerLeaders});
 })
 
+router.get('/poker-leaders', async (req, res) => {
+    let pokerLeaders = await User.find().sort({"poker.wins" : -1}).limit(5);
+    console.log(pokerLeaders);
+    res.render('games/poker-leaders.ejs', {leaders: pokerLeaders});
+
+});
 
 module.exports = router;
