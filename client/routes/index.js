@@ -225,6 +225,14 @@ router.post('/game_results', async (req, res) => {
           //session.user = updatedAccount;
           console.log(updatedAccount)
           res.redirect('/profile');
-            });
+});
+
+router.get('/leaderboards', async (req, res) => {
+    let pokerLeaders = await User.find().sort({"poker.wins" : -1}).limit(5);
+    console.log(pokerLeaders);
+    let hiloLeaders = await User.find().sort({"hi_lo.wins" : -1}).limit(5);
+    console.log(hiloLeaders);
+    res.render('leaderboards', {pokerLeaders: pokerLeaders, hiloLeaders: hiloLeaders});
+});
 
 module.exports = router;
