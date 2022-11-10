@@ -2,7 +2,6 @@ const { application } = require('express');
 const express = require('express');
 const User = require('../models/new_User')
 const router = express.Router()
-//app.use(express.json());
 
 var session;
 var authenticated;
@@ -41,14 +40,16 @@ router.post('/sign_up', async (req,res) => {
     session = req.session;
     console.log(req.sessionID);
 
-    //check if account exists using username, if it does then error message on html form is displayed
+    //check if account exists using username, if it does then user notified and page refreshed 
     const accountExists = await User.exists({username: req.body.username})
         if(accountExists) {
             res.render('sign_up', {
                 user: user,
                 errorMessage: 'Username ' + req.body.username + ' already exists!'
             })
+            return;
         }
+
 
     //otherwise new user is created
      var user = new User({
@@ -62,7 +63,11 @@ router.post('/sign_up', async (req,res) => {
         games_played: 0,
         hi_lo: {
             wins: 0,
-            losses: 0,
+            losses: 0
+        },
+        poker: {
+            wins: 0,
+            losses: 0
         }
         });
 
@@ -74,7 +79,7 @@ router.post('/sign_up', async (req,res) => {
             var profile = user;
             profile.password = undefined;
             session.user = profile;
-            console.log(session.user)
+            console.log(session.user);
             authenticated=true;
             res.redirect('/profile');
 
@@ -143,8 +148,10 @@ router.post('/edit_account', async(req,res) => {
     //setting new to true will return profile after it's been updated
     const opts = {new: true};
 
-    //if new password and confirm password match, then change profile info
-    if(req.body.password === req.body.password_confirm) {
+    const usernameTaken = await User.exists({username: req.body.username});
+       
+    //if new password and confirm password match, and new username doesn't exist then change profile info
+    if(req.body.password === req.body.password_confirm && !usernameTaken) {
         var updatedAccount = await User.findOneAndUpdate (
         {
             //find user's profile using sessionID
@@ -162,10 +169,16 @@ router.post('/edit_account', async(req,res) => {
         //update the cookie's user info to reflect the new user info, then redirect back to /profile
         session.user = updatedAccount;
         res.redirect('/profile');
-        }
+    }
         
-        else(res.render('profile', {user: session.user}));
-    });
+        else {
+            if(usernameTaken)
+            res.render('profile', {user: session.user, errorMessage: "A profile with that username already exists"});
+
+            else {
+            res.render('profile', {user: session.user, errorMessage: "passwords do not match, please try again"})}
+            };
+});
 
 router.post('/logout', (req, res) => {
      if(req.session) {
@@ -212,6 +225,14 @@ router.post('/game_results', async (req, res) => {
           //session.user = updatedAccount;
           console.log(updatedAccount)
           res.redirect('/profile');
-            });
+});
+
+router.get('/leaderboards', async (req, res) => {
+    let pokerLeaders = await User.find().sort({"poker.wins" : -1}).limit(5);
+    console.log(pokerLeaders);
+    let hiloLeaders = await User.find().sort({"hi_lo.wins" : -1}).limit(5);
+    console.log(hiloLeaders);
+    res.render('leaderboards', {pokerLeaders: pokerLeaders, hiloLeaders: hiloLeaders});
+});
 
 module.exports = router;

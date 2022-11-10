@@ -1,0 +1,17 @@
+<div class="leaderboard">
+    <table>
+        <tr><h3>Poker Wins Leaders</h3></tr>
+        <% for (var i = 0; i < pokerLeaders.length; i++) { %>
+            <tr> <td><%= pokerLeaders[i].username %></td> <td><%= pokerLeaders[i].poker.wins %> <td></tr>
+        <% } %>
+</table>
+</div>
+
+<div class="leaderboard">
+    <table>
+        <tr><h3>HiLo Wins Leaders</h3></tr>
+        <% for (var i = 0; i < hiloLeaders.length; i++) { %>
+            <tr> <td><%= hiloLeaders[i].username %></td> <td><%= hiloLeaders[i].hi_lo.wins %> <td></tr>
+        <% } %>
+</table>
+</div>

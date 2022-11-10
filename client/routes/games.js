@@ -7,17 +7,12 @@ router.get('/',(req,res) => {
     res.render('games/index')
 })
 
-router.get('/hilo', async (req, res) => {
-    //get all users
-   let userList = await User.find({});
-   console.log(userList);
-
+router.get('/hilo',(req, res) => {
     res.render('games/hilo');
 });
 
-router.get('/poker', (req,res) => {
-    res.render('games/poker')
+router.get('/poker',(req,res) => {
+    res.render('games/poker');
 })
-
 
 module.exports = router;
