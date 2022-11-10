@@ -1,35 +1,17 @@
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
 import * as rules from '/js/games/poker/rules.js'
 
-var slider = document.getElementById("myRange")
-var output = document.getElementById("demo")
-output.innerHTML = slider.value
-
-slider.oninput = function () {
-    output.innerHTML = this.value
-}
-
 window.onload = function () {
     document.getElementById("rooms").click();
 }
 
+var assignedId
+
+var idPlaying
+
+let currentDeck = []
+
 var poker = io("http://localhost:8080/poker")
-
-var check = document.getElementById("check")
-var fold = document.getElementById("fold")
-var raise = document.getElementById("raise")
-
-check.addEventListener("click", e => {
-    poker.emit("player-check")
-})
-
-fold.addEventListener("click", e => {
-    poker.emit("player-fold")
-})
-
-raise.addEventListener("click", e => {
-    poker.emit("player-raise")
-})
 
 var createRoom = document.getElementById("createRoom")
 var seerooms = document.getElementById("rooms")
@@ -43,6 +25,10 @@ createRoom.addEventListener("click", e => {
 seerooms.addEventListener("click", e => {
     poker.emit("see-rooms")
     document.getElementById("rooms-table-body").innerHTML = ""
+})
+
+poker.on("assign-id", id => {
+    assignedId = id
 })
 
 poker.on("fetched-rooms", response => {
@@ -90,18 +76,14 @@ poker.on("create-status", (response, onlineId, room) => {
         document.getElementById("createRoomDisplay").style.display = "none"
         document.getElementById("rooms-table").style.display = "none"
         document.getElementById("game").style.display = "block"
+        document.getElementById("game-message").innerText = "Waiting for game to start...."
+        document.getElementById("playerOptions").style.display = "block"
 
-        document.getElementById("player").style.visibility = "visible"
-        document.getElementById("player").id = onlineId
+        assignPlayerHtml(onlineId)
+
     }
 
-    var game = document.getElementById("game")
-
-    var html = game.outerHTML
-
-    var data = { html: html }
-
-    poker.emit("save-game-data", data, room)
+    updatePage(document.getElementById("game"), room)
 
 })
 
@@ -113,24 +95,17 @@ poker.on('joined-progress-game-status', (response, onlineId, data, room) => {
     if (response) {
         document.getElementById("createRoomDisplay").style.display = "none"
         document.getElementById("rooms-table").style.display = "none"
+        document.getElementById("playerOptions").style.display = "block"
 
         document.getElementById("game-status").innerHTML = data.html
 
-        document.getElementById("player").style.visibility = "visible"
-        document.getElementById("player").id = onlineId
+        assignPlayerHtml(onlineId)
 
-        var game = document.getElementById("game")
-
-        var html = game.outerHTML
-
-        var updatedData = { html: html }
-
-        poker.emit("save-game-data", updatedData, room)
+        updatePage(document.getElementById("game"), room)
     }
 })
 
 poker.on('update-game', data => {
-    console.log("updated")
     document.getElementById("game-status").innerHTML = data.html
 })
 
@@ -138,11 +113,54 @@ poker.on('user-left', (id, room) => {
     document.getElementById(id).style.visibility = "hidden"
     document.getElementById(id).id = "player"
 
-    var game = document.getElementById("game")
+    updatePage(document.getElementById("game"), room)
+})
 
-    var html = game.outerHTML
+poker.on('start-game', (response, playerTurn, room) => {
+    if (response) {
+        document.getElementById("game-message").innerHTML = ""
+        idPlaying = playerTurn
+
+        currentDeck = rules.startRound()
+    }
+})
+
+//listeners for dynamic content in page
+document.querySelector('body').addEventListener('click', function (e) {
+    //only if its the turn of the player enable actions
+    if (idPlaying == assignedId) {
+        if (e.target.id == 'check') {
+            console.log("checked")
+        }
+    }
+
+})
+
+document.querySelector('body').addEventListener('mousedown', function (e) {
+    //only if its the turn of the player enable actions
+    if (idPlaying == assignedId) {
+        if (e.target.id == 'myRange') {
+            e.target.oninput = function () {
+                document.getElementById("demo").innerHTML = this.value
+            }
+        }
+    }
+
+})
+
+function updatePage(gamePage, room) {
+    var html = gamePage.outerHTML
 
     var updatedData = { html: html }
 
     poker.emit("save-game-data", updatedData, room)
-})
+}
+
+function assignPlayerHtml(id) {
+    document.getElementById("player").style.visibility = "visible"
+    document.getElementById("player").id = id
+    document.getElementById("player-status").id = id + "-status"
+    document.getElementById("player-chips").id = id + "-chips"
+    document.getElementById("user-card-1").id = id + "-card-1"
+    document.getElementById("user-card-2").id = id + "-card-2"
+}

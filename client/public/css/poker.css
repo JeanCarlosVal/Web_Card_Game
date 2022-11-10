@@ -1,3 +1,12 @@
+.message{
+    position: absolute;
+    z-index: 10;
+    left: 35%;
+    font-size: 3rem;
+    top: 24rem;
+    color: white;
+}
+
 .table {
     margin-left: auto;
     margin-right: auto;
@@ -85,28 +94,91 @@
     margin-top: 70px;
     border-top-right-radius: 200px;
     border-top-left-radius: 200px;
+    display: none;
 }
 
 .user-card-1 {
     position: relative;
     width: 100px;
-    height: 150px;
+    height: 138px;
     border: 3px solid black;
     background-color: white;
     left: 25rem;
     top: 17px;
     border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+}
+
+.user-card-1.red{
+    color: red;
+}
+
+.user-card-1.black{
+    color: black;
+}
+
+.user-card-1::before,
+.user-card-1::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.user-card-1::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.user-card-1::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
 }
 
 .user-card-2 {
     position: relative;
     width: 100px;
-    height: 150px;
+    height: 138px;
     border: 3px solid black;
     background-color: white;
     left: 32rem;
-    bottom: 8.33rem;
+    bottom: 7.70rem;
     border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+}
+
+.user-card-2.red{
+    color: red;
+}
+
+.user-card-2.black{
+    color: black;
+}
+
+.user-card-2::before,
+.user-card-2::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.user-card-2::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.user-card-2::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
 }
 
 .fold-button {
@@ -198,7 +270,7 @@
 
 .user-options {
     position: relative;
-    bottom: 10rem;
+    bottom: 9.50rem;
     left: 8.5rem;
     width: 0%;
     height: 0%;
@@ -213,6 +285,7 @@
 
 .slider {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     height: 15px;
     border-radius: 5px;
@@ -257,50 +330,211 @@
     position: relative;
     display: inline-block;
     width: 100px;
-    height: 150px;
+    height: 138px;
     border: 3px solid black;
     background-color: white;
     border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.8rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
+}
+
+.table-card-1.red{
+    color: red;
+}
+
+.table-card-1.black{
+    color: black;
+}
+
+.table-card-1::before,
+.table-card-1::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-1::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-1::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
 }
 
 .table-card-2 {
     position: relative;
     display: inline-block;
     width: 100px;
-    height: 150px;
+    height: 138px;
     border: 3px solid black;
     background-color: white;
     border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
+}
+
+.table-card-2.red{
+    color: red;
+}
+
+.table-card-2.black{
+    color: black;
+}
+
+.table-card-2::before,
+.table-card-2::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-2::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-2::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
 }
 
 .table-card-3 {
     position: relative;
     display: inline-block;
     width: 100px;
-    height: 150px;
+    height: 138px;
     border: 3px solid black;
     background-color: white;
     border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
+}
+
+.table-card-3.red{
+    color: red;
+}
+
+.table-card-3.black{
+    color: black;
+}
+
+.table-card-3::before,
+.table-card-3::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-3::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-3::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
 }
 
 .table-card-4 {
     position: relative;
     display: inline-block;
     width: 100px;
-    height: 150px;
+    height: 138px;
     border: 3px solid black;
     background-color: white;
     border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
 }
+
+.table-card-4.red{
+    color: red;
+}
+
+.table-card-4.black{
+    color: black;
+}
+
+.table-card-4::before,
+.table-card-4::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-4::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-4::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
+}
+
 
 .table-card-5 {
     position: relative;
     display: inline-block;
     width: 100px;
-    height: 150px;
+    height: 138px;
     border: 3px solid black;
     background-color: white;
     border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
+}
+
+.table-card-5.red{
+    color: red;
+}
+
+.table-card-5.black{
+    color: black;
+}
+
+.table-card-5::before,
+.table-card-5::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-5::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-5::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
 }
 
 .player1-info {

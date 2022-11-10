@@ -24,63 +24,64 @@
 </div>
 <div id="game-status">
     <div id="game" class="game">
+        <div id="game-message" class="message">hello</div>
         <div class="table">
             <div id="player" class="player1">
                 <div class="player1-info">
-                    <p id="player1-status">Status</p>
-                    <p id="player1-chips">Chips</p>
+                    <p id="player-status">Status</p>
+                    <p id="player-chips">10000</p>
                 </div>
             </div>
             <div id="player" class="player2">
                 <div class="player2-info">
-                    <p id="player2-status">Status</p>
-                    <p id="player2-chips">Chips</p>
+                    <p id="player-status">Status</p>
+                    <p id="player-chips">10000</p>
                 </div>
             </div>
             <div id="player" class="player3">
                 <div class="player3-info">
-                    <p id="player3-status">Status</p>
-                    <p id="player3-chips">Chips</p>
+                    <p id="player-status">Status</p>
+                    <p id="player-chips">10000</p>
                 </div>
             </div>
             <div id="player" class="player4">
                 <div class="player4-info">
-                    <p id="player4-status">Status</p>
-                    <p id="player4-chips">Chips</p>
+                    <p id="player-status">Status</p>
+                    <p id="player-chips">10000</p>
                 </div>
             </div>
             <div id="player" class="player5">
                 <div class="player5-info">
-                    <p id="player5-status">Status</p>
-                    <p id="player5-chips">Chips</p>
+                    <p id="player-status">Status</p>
+                    <p id="player-chips">10000</p>
                 </div>
             </div>
             <div id="player" class="player6">
                 <div class="player6-info">
-                    <p id="player6-status">Status</p>
-                    <p id="player6-chips">Chips</p>
+                    <p id="player-status">Status</p>
+                    <p id="player-chips">10000</p>
                 </div>
             </div>
             <div class="deck-of-cards">
-                <div id="table-card-1" class="table-card-1"></div>
-                <div id="table-card-2" class="table-card-2"></div>
-                <div id="table-card-3" class="table-card-3"></div>
-                <div id="table-card-4" class="table-card-4"></div>
-                <div id="table-card-5" class="table-card-5"></div>
+                <div id="table-card-1" class="table-card-1" data-value="9♠">♠</div>
+                <div id="table-card-2" class="table-card-2" data-value="9♣">♣</div>
+                <div id="table-card-3" class="table-card-3" data-value="9♣">♣</div>
+                <div id="table-card-4" class="table-card-4" data-value="9♣">♣</div>
+                <div id="table-card-5" class="table-card-5" data-value="9♣">♣</div>
             </div>
         </div>
-        <div class="userpokertemplate">
-            <div id="user-card-1" class="user-card-1"></div>
-            <div id="user-card-2" class="user-card-2"></div>
-            <div class="user-options">
-                <button class="fold-button" role="button" id="fold"> FOLD </button>
-                <button class="check-button" id="check"> CHECK </button>
-                <button class="raise-button" id="raise"> RAISE BET </button>
-                <div class="slidecontainer">
-                    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-                    <p>Chips: <span id="demo"></span></p>
-                </div>
-            </div>
+    </div>
+</div>
+<div id="playerOptions" class="userpokertemplate">
+    <div id="user-card-1" class="user-card-1" data-value=""></div>
+    <div id="user-card-2" class="user-card-2" data-value=""></div>
+    <div class="user-options">
+        <button class="fold-button" role="button" id="fold"> FOLD </button>
+        <button class="check-button" role="button" id="check"> CHECK </button>
+        <button class="raise-button" role="button" id="raise"> RAISE BET </button>
+        <div class="slidecontainer">
+            <input type="range" min="50" max="1000" value="50" class="slider" id="myRange">
+            <p>Chips: <span id="demo"></span></p>
         </div>
     </div>
 </div>

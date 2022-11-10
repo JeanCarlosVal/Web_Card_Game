@@ -1,23 +1,18 @@
-function playerRotation(players) {
-    var k = 1
-    function reverse(arr, start, end) {
-        while (start < end) {
-            [arr[start], arr[end]] = [arr[end], arr[start]];
-            start++;
-            end--;
-        }
-    }
+import Deck from '/js/games/poker/Deck.js'
 
-    k %= players.length;
-
-    reverse(players, 0, (players.length - 1));
-    reverse(players, 0, (k - 1));
-    reverse(players, k, (players.length - 1));
-
-    return players
+function startRound() {
+    const deck = new Deck()
+    deck.shuffle()
+    return deck
 }
 
+function giveCardsToPlayer(deck){
+    const cardOne = deck.pop()
+    const cardTwo = deck.pop()
 
-export {
-    playerRotation
+    document.getElementById()
+}
+
+export{
+    startRound
 }
