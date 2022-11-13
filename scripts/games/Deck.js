@@ -1,16 +1,14 @@
-import {Card} from '/js/games/Card.js';
-// const {Card} = require("/js/games/Card.js");
+const Card = require('./Card.js');
 
-class Deck {
+module.exports = class Deck {
     constructor(type) {
+        this.cards = [];
+        this.type = type;
         if (type === 'standard52') {
-            this.cards = [];
-            if (standard52) {
-                this.numCards = 52;
-                for (var suite = 1; suite <= 4; suite++) {
-                    for (var rank = 1; rank <= 13; rank++) {
-                        this.cards.push(new Card(rank, suite));
-                    }
+            this.numCards = 52;
+            for (var suite = 1; suite <= 4; suite++) {
+                for (var rank = 1; rank <= 13; rank++) {
+                    this.cards.push(new Card(rank, suite));
                 }
             }
         }
@@ -64,9 +62,3 @@ class Deck {
         return str;
     }
 }
-
-export {Deck};
-
-/*module.exports = {
-    Deck
-}*/

@@ -1,19 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const io = require('socket.io-client')
 
 router.get('/',(req,res) => {
-
-    console.log(req.session)
-    res.render('games/index')
-})
+    console.log(req.session);
+    res.render('games/index');
+});
 
 router.get('/hilo', (req, res) => {
     res.render('games/hilo');
-})
+});
 
 router.get('/poker', (req,res) => {
     res.render('games/poker')
+})
+
+router.get('/slap', (req,res) => {
+    res.render('games/slap')
 })
 
 module.exports = router

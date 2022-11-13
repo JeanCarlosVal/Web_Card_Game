@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="/css/lobbytable.css">
+<link rel="stylesheet" href="/css/slap.css">
+
+<div id="pre-lobby" class="createRoomDisplay">
+    <p>Create a room or join an available room</p>
+    <button id="createRoom"> Create Room </button>
+    <input type="text" id="roomName">
+    <button id="refresh-rooms">Refresh Rooms</button>
+    <div id="rooms-table" class="rooms-table">
+        <table class="available-rooms">
+            <thead>
+                <tr>
+                    <th>Available Rooms</th>
+                    <th>Active Players</th>
+                    <th>Join</th>
+                </tr>
+            </thead>
+            <tbody id="available-rooms" >
+    
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="in-lobby">
+    <p>PLAYERS IN HERE:</p>
+    <ul id="players-in-lobby">
+    </ul>
+    <button id="leave">Leave Lobby</button>
+</div>
+
+<div id="prep">
+    <p>Starting Game...</p>
+</div>
+
+<div id="game" class="game">
+    <ul id="updates">UPDATES</ul>
+
+    <div>
+        <div id="deck"></div>
+        <div id="player1" class="player"></div>
+        <div id="player2" class="player"></div>
+        <div id="player3" class="player"></div>
+        <div id="player4" class="player"></div>
+        <div id="player5" class="player"></div>
+        <div id="player6" class="player"></div>
+        <div id="player7" class="player"></div>
+        <div id="player8" class="player"></div>
+
+    </div>
+
+    <button id="slap">SLAP!</button>
+    <button id="play">next card</button>
+
+    <script type="module" src="/js/games/slap/slap.js"></script>
+</div>
+
+<!-- <script type="module" src="/js/games/rooms.js"></script> -->
+<script type="module" src="/js/games/slap/slap.js"></script>

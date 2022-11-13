@@ -1,16 +1,17 @@
-import {Card} from '/js/games/Card.js';
-// const {Card} = require("/js/games/Card.js");
+const Card = require('./Card.js');
 
-class Deck {
+module.exports = class Deck {
     constructor(type) {
-        if (type === 'standard52') {
-            this.cards = [];
-            if (standard52) {
-                this.numCards = 52;
-                for (var suite = 1; suite <= 4; suite++) {
-                    for (var rank = 1; rank <= 13; rank++) {
-                        this.cards.push(new Card(rank, suite));
-                    }
+        this.cards = [];
+        this.type = type;
+        if (type === 'hand') {
+            this.type = 'hand';
+        }
+        else if (type === 'standard52') {
+            this.total = 52;
+            for (var suite = 1; suite <= 4; suite++) {
+                for (var rank = 1; rank <= 13; rank++) {
+                    this.cards.push(new Card(rank, suite));
                 }
             }
         }
@@ -31,14 +32,11 @@ class Deck {
         this.cards.unshift(c);
     }
     // returns a refernce to the card at index. 0 is bottom, n is top.
+    getTop(index) {
+        return this.cards[this.cards.length - 1 - index];
+    }
     getBottom(index) {
         return this.cards[index];
-    }
-    getTop(index) {
-        return this.cards[this.cards.length - index];
-    }
-    numCards() {
-        return this.cards.length();
     }
     shuffle() {
         for (var i = 0; i < this.cards.length; i++) {
@@ -56,17 +54,22 @@ class Deck {
             return a.compareTo(b);
         });
     }
+    size() {
+        return this.cards.length;
+    }
+    isEmpty() {
+        if (this.cards.length == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     toString() {
         var str = "";
-        for (var i = 0; i < this.numCards; i++) {
+        for (var i = 0; i < this.numCards(); i++) {
            str += this.cards[i].toString() + '\n';
         }
         return str;
     }
 }
-
-export {Deck};
-
-/*module.exports = {
-    Deck
-}*/

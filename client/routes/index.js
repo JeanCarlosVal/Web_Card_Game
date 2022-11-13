@@ -1,6 +1,11 @@
+const { application } = require('express');
 const express = require('express');
+//const app = express();
+const { Session } = require('express-session');
+const { exists, findOneAndUpdate } = require('../models/new_User');
 const User = require('../models/new_User')
 const router = express.Router()
+//app.use(express.json());
 
 var session;
 var authenticated;
@@ -168,6 +173,24 @@ router.post('/logout', (req, res) => {
         });
     }
     res.redirect('/');
+})
+router.post('/game_results', async (req, res) => {
+    var win = 0;
+    var loss = 0;
+
+    //(req.body.win) ? win = 1 : loss =1 ;
+    console.log(win)
+    console.log(loss);
+    res.send('hi');
+
+})
+
+router.get('/realtime', (req, res) => {
+    res.render('realtime');
+})
+
+router.get('/slap', (req, res) => {
+    res.render('slap');
 })
 
 module.exports = router;

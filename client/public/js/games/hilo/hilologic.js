@@ -10,8 +10,6 @@ deck.shuffle();
 var numcorrect = 0;
 var numwrong = 0;
 
-var basedisplay = document.getElementById("basedisplay");
-var challengedisplay = document.getElementById("challengedisplay");
 var numWrongDisp = document.getElementById("numwrong");
 var numCorrectDisp = document.getElementById("numcorrect");
 
@@ -82,6 +80,11 @@ document.getElementById("lower").addEventListener('click', () => {
 function gameOver() {
     const xhr = new XMLHttpRequest();
     xhr.open('post','/game_results');
-    xhr.send({win:false, game:'hilo'});
+    if (numcorrect > numcorrect) {
+        xhr.send({'win':1, 'game': 'hilo'});
+    }
+    else {
+        xhr.send({'win':0, 'game': 'hilo'});
+    }
     document.body.innerHTML = "<p>The game is over because the deck is empty. You got " + numcorrect + " right and " + numwrong + " wrong. Refresh to play again.";
 }
