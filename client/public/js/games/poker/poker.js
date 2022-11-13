@@ -35,7 +35,10 @@ poker.on("fetched-rooms", response => {
     var rooms = Array.from(response)
 
     rooms.forEach(element => {
+
+
         poker.emit("check-room", element)
+
     });
 })
 
@@ -122,6 +125,11 @@ poker.on('start-game', (response, playerTurn, room) => {
         idPlaying = playerTurn
 
         currentDeck = rules.startRound()
+
+        updatePage(document.getElementById("game"),room)
+        if (idPlaying == assignedId) {
+            poker.emit('give-cards-to-players', currentDeck.cards, room)
+        }
     }
 })
 

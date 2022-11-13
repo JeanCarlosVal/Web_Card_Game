@@ -6,13 +6,6 @@ function startRound() {
     return deck
 }
 
-function giveCardsToPlayer(deck){
-    const cardOne = deck.pop()
-    const cardTwo = deck.pop()
-
-    document.getElementById()
-}
-
 export{
     startRound
 }

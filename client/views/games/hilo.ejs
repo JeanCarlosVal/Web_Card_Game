@@ -1,4 +1,16 @@
+<div class="leaderboard">
+    <table>
+        <tr><h3>HiLo Wins Leaders</h3></tr>
+        <% for (var i = 0; i < leaders.length; i++) { %>
+            <tr> <td><%= leaders[i].username %></td> <td><%= leaders[i].hi_lo.wins %> <td></tr>
+        <% } %>
+</table>
+</div>
 
+
+    
+    
+    
     <p id="basedisplay">XXX</p>
     <p id="challengedisplay">XXX</p>
     <button id="higher">Higher</button>
