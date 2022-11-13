@@ -16,6 +16,10 @@ let players = []
 
 let rooms_players = {}
 
+let decks = []
+
+let rooms_decks = {} 
+
 //When user connects do this
 pokerIo.on("connection", socket => {
 
@@ -41,6 +45,7 @@ pokerIo.on("connection", socket => {
     let checkGameStart
 
     //When connected it automatically sets a room for the user using the user id this code below leaves it then it logs the user id
+
     socket.leave(socket.id)
 
     socket.emit("assign-id", socket.id)
@@ -138,5 +143,24 @@ pokerIo.on("connection", socket => {
             clearInterval(checkGameStart)
         }
     }
+
+    socket.on('give-cards-to-players', (deck, room) => {
+
+        decks.push({"room": room, "deck": deck})
+
+        var RoomCards = decks.filter(function(element){
+            return element.room == room
+        })
+
+        var currentRoomCards = RoomCards.map(function(element){
+            return element.deck
+        })
+
+        rooms_decks[room] = currentRoomCards
+
+        //rooms_decks[room] contains the array of cards under another array the first [0] is to access the cards array
+        console.log(rooms_decks[room][0][0])
+
+    })
 
 })
