@@ -2,6 +2,9 @@
   <%= errorMessage %>
   <%}%>
 
+<form action="/logout" method="post">
+    <button id="logout-btn" type="submit" style="position: absolute; top: 0px; right: 0px;">Logout</button> 
+</form>
 <center><h1> <%= user.username %></h1></center>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -43,42 +46,42 @@
 <center>
 <table>
     <tr>
-        <td> name: <%= user.first_name + ' ' + user.last_name %></td>
+        <td> <center>Name: <%= user.first_name + ' ' + user.last_name %></center></td>
     </tr>
     <!--<tr>
         <td> date of birth: <%= user.date_of_birth %> </td>
     </tr> -->
     <tr>
-        <td> wins: <%= user.wins %> </td>
+        <td><center> Wins: <%= user.wins %> </center></td>
     </tr>
     <tr>
-        <td> losses: <%= user.losses %> </td>
+        <td> <center>Losses: <%= user.losses %> </center></td>
     </tr>
     <tr>
-        <td>total games played: <%= user.games_played %></td>
+        <td><center>Total Games Played: <%= user.games_played %></center></td>
     </tr>
 </table>
 </center>
 
 <!-- buttons open account edit or accoutn delete modals -->
-<center><button id="delete-btn" class="profile-btn" onclick="show(delete_modal)">Delete Account</button>
-<button id = "edit-profile-btn" class="profile-btn" onclick="show(edit_modal)"> Edit Profile </button></center>
+<center><button class="arial-font shadow cool-button success-button" id="delete-btn" class="profile-btn" onclick="show(delete_modal)">Delete Account</button>
+<button class="arial-font shadow cool-button success-button" id = "edit-profile-btn" class="profile-btn" onclick="show(edit_modal)"> Edit Profile </button></center>
 
 
 <!-- Modal for account deletion -->
 <div id="delete-modal" class="modal">
   <!-- Modal content -->
   <div class="modal-content">
-    Enter Account Credentials To Delete Account
+    <center>Enter Account Credentials To Delete Account</center>
     <form action="/delete_profile" method="POST">
-        <label for="username">Username</label>
-            <input type="text" name="username">
-        <label for="password">Password</label>
-            <input type="password" name="password">
+        <!--<label for="username">Username</label>-->
+            <input id = "style" type="text" name="username" placeholder="Username">
+        <!--<label for="password">Password</label>-->
+            <input id = "style" type="password" name="password" placeholder="Password">
             <br>
-        <button type="submit">Delete Account</button>
+        <button class="arial-font shadow cool-button success-button" type="submit">Delete Account</button>
     </form>
-    <button id="go-back" class="profile-btn" onclick="hide(delete_modal)">Go Back</button>
+    <button class="arial-font shadow cool-button success-button" id="go-back" class="profile-btn" onclick="hide(delete_modal)">Go Back</button>
   </div>
 </div>
 
@@ -87,16 +90,16 @@
   <!-- Modal content -->
   <div class="modal-content">
     <form action="/edit_account" method="POST">
-        <label for="username">Username</label>
-            <input type="text" name="username">
-        <label for="password">New Password</label>
-            <input type="password" name="password">
-        <label for="password-confirm">Confirm New Password</label>
-            <input type="password" name="password_confirm">
+        <!--<label for="username">Username</label>-->
+            <input id = "style" type="text" name="username" placeholder="Username">
+        <!--<label for="password">New Password</label>-->
+            <input id = "style" type="password" name="password" placeholder="Password">
+        <!--<label for="password-confirm">Confirm New Password</label>-->
+            <input id = "style" type="password" name="password_confirm" placeholder="Confirm Password">
             <br>
-        <button type="submit">Edit Account</button>
+        <button class="arial-font shadow cool-button success-button" type="submit">Edit Account</button>
     </form>
-    <button id="go-back" class="profile-btn" onclick="hide(edit_modal)">Go Back</button>
+    <button class="arial-font shadow cool-button success-button" id="go-back" class="profile-btn" onclick="hide(edit_modal)">Go Back</button>
   </div>
 </div>
 

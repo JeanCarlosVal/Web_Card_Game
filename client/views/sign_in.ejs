@@ -4,11 +4,15 @@
 <a href="/sign_up">create an account?</a>
 <%}%>
 
-    <form action="/sign_in" method="POST">
-        <div><label> Username:&nbsp  </label>
-        <input type="text" name="username"></div>
-        <div><label> Password:&nbsp </label>
-        <input type="password" name="password"></div>
-        <div><a href="/">cancel</a></div>
-        <div><button type="submit"> Log In! </button></div>
-    </form>
+    <center><form action="/sign_in" method="POST">
+        <!--<label> Username:&nbsp  </label>-->
+        <input id = "style" type="text" name="username" placeholder="Username">
+        <br />
+        <br />
+        <!--<label> Password:&nbsp </label>-->
+        <input id = "style" type="password" name="password" placeholder="Password">
+        <br />
+        <br />
+        <a class="arial-font shadow cool-button success-button" href="/">Cancel</a>
+        <button class="arial-font shadow cool-button success-button" type="submit"> Log In! </button>
+    </form></center>
