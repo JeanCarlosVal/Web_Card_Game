@@ -114,6 +114,7 @@ socket.on("joined-lobby", (pkg) => {
 //
 
 var isTurn = false;
+var numCards = 0;
 
 socket.on('game-prep', (pkg) => {
     inlobby.style.display = "none";
@@ -121,34 +122,37 @@ socket.on('game-prep', (pkg) => {
 });
 
 socket.on('game-start', (pkg) => {
-    console.log("game-started");
     prep.style.display = "none";
     game.style.display = "block";
 
     if (pkg.currentPlayer == yourid) {
         isTurn = true;
     }
+
+    newUpdate("Game Started.");
 });
 
 socket.on('your-turn', (pkg) => {
-    console.log("Your turn!");
     isTurn = true;
+    newUpdate("Your Turn!");
 });
 
-socket.on('enemy-first', (okg) => {
-    console.log("Someone hit the deck!");
+socket.on('enemy-first', (pkg) => {
+    newUpdate("Someone hit the deck!");
 });
 
 socket.on('you-first', (pkg) => {
-    console.log("you slapped first!");
+    newUpdate("you slapped first!");
+    numCards += pkg.deckSize;
 });
 
 socket.on('too-slow', (pkg) => {
-    console.log("Someone was faster than you!")
+    newUpdate("Someone was faster than you!");
 });
 
 socket.on('bad-slap', (pkg) => {
-    console.log("You slapped with no combo!");
+    newUpdate("You slapped with no combo!");
+    numCards--;
 });
 
 slap.addEventListener('click', (e) => {
@@ -171,3 +175,9 @@ play.addEventListener('click', (e) => {
         lobbyid:yourlobby
     });
 });
+
+function newUpdate(text) {
+    var up = document.createElement("li");
+    up.innerText = text;
+    updates.appendChild(text);
+}

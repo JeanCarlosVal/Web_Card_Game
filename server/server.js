@@ -133,10 +133,11 @@ slap.on('connection', (socket)=> {
     })
     socket.on('put', (pkg) => {
         console.log(socket.id + " put down a card.")
+        
         var lobby = slaplm.getLobby(pkg.lobbyid);
         lobby.play("put", socket.id);
-        socket.to(pkg.lobbyid).emit('enemy-put', {enemy:socket.id});
-        console.log(lobby.currentPlayer.socketid);
+        var cardPut = lobby.deck.getTop(0).toString();
+        socket.to(pkg.lobbyid).emit('enemy-put', {enemy:socket.id, card:cardPut});
         socket.to(lobby.currentPlayer.socketid).emit('your-turn');
     });
     socket.on('slap', (pkg) => {

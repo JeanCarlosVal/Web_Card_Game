@@ -22,7 +22,6 @@ module.exports = class Slap {
         this.deck.shuffle();
         var i = 0;
         while (!this.deck.isEmpty()) {
-            console.log("start" + this.deck.size());
             this.players[i].put(this.deck.draw());
             i++;
             if (i == this.players.length) {
@@ -30,16 +29,16 @@ module.exports = class Slap {
             }
         }
         // initialize game state
-        var p = "player";
-        for (var i = 0; i < this.players.length; i++) {
-            this.state[p+i+1] = {
-                socketid:players[i].socketid,
-                username:players[i].username,
-                sessionid:playes[i].sessionid,
-                numCards:0,
-            }
-        }
-        this.state.currentPlayerSID = this.currentPlayer.socketid;
+        // var p = "player";
+        // for (var i = 0; i < this.players.length; i++) {
+        //     this.state[p+i+1] = {
+        //         socketid:players[i].socketid,
+        //         username:players[i].username,
+        //         sessionid:playes[i].sessionid,
+        //         numCards:0,
+        //     }
+        // }
+        // this.state.currentPlayerSID = this.currentPlayer.socketid;
 
     }
     finish() {
