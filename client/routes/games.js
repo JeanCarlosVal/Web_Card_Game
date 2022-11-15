@@ -15,4 +15,8 @@ router.get('/poker',(req,res) => {
     res.render('games/poker');
 })
 
+router.get('/war', (req, res) => {
+    res.render('games/war');
+})
+
 module.exports = router;
