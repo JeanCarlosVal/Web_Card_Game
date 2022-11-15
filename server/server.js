@@ -18,11 +18,12 @@ let rooms_players = {}
 
 let decks = []
 
-let rooms_decks = {} 
+let rooms_decks = {}
 
 //When user connects do this
 pokerIo.on("connection", socket => {
 
+    //Decides which player is playing 
     function playerRotation(players) {
         var k = 1
         function reverse(arr, start, end) {
@@ -32,14 +33,27 @@ pokerIo.on("connection", socket => {
                 end--;
             }
         }
-    
+
         k %= players.length;
-    
+
         reverse(players, 0, (players.length - 1));
         reverse(players, 0, (k - 1));
         reverse(players, k, (players.length - 1));
-    
+
         return players
+    }
+
+    //filter players array to assign players to each room, this is going to help to keep track of who is playing in the game 
+    function filterPlayers(players, room) {
+        var RoomPlayers = players.filter(function (element) {
+            return element.room == room
+        })
+
+        var currentRoomPlayers = RoomPlayers.map(function (element) {
+            return element.playerId
+        })
+
+        return currentRoomPlayers
     }
 
     let checkGameStart
@@ -54,22 +68,14 @@ pokerIo.on("connection", socket => {
         try {
             socket.join(room)
 
-            checkGameStart = setInterval(function(){
-                console.log("Checking if game can start in room: "+ room)
+            checkGameStart = setInterval(function () {
+                console.log("Checking if game can start in room: " + room)
                 minimumPlayers(room)
             }, 10000)
 
-            players.push({"room": room, "playerId": socket.id})
+            players.push({ "room": room, "playerId": socket.id })
 
-            var RoomPlayers = players.filter(function(element){
-                return element.room == room
-            })
-
-            var currentRoomPlayers = RoomPlayers.map(function(element){
-                return element.playerId
-            })
-
-            rooms_players[room] = currentRoomPlayers
+            rooms_players[room] = filterPlayers(players, room)
 
             socket.emit("create-status", true, socket.id, room)
         } catch (error) {
@@ -98,17 +104,9 @@ pokerIo.on("connection", socket => {
     socket.on('join-game', roomName => {
         try {
             socket.join(roomName)
-            players.push({"room": roomName, "playerId": socket.id})
+            players.push({ "room": roomName, "playerId": socket.id })
 
-            var RoomPlayers = players.filter(function(element){
-                return element.room == roomName
-            })
-
-            var currentRoomPlayers = RoomPlayers.map(function(element){
-                return element.playerId
-            })
-
-            rooms_players[roomName] = currentRoomPlayers
+            rooms_players[roomName] = filterPlayers(players, roomName)
 
             socket.emit("joined-progress-game-status", true, socket.id, rooms_data[roomName], roomName)
         } catch (error) {
@@ -125,41 +123,64 @@ pokerIo.on("connection", socket => {
     socket.on('disconnecting', e => {
         clearInterval(checkGameStart)
         for (const room of socket.rooms) {
-            if(room !== socket.id){
-                var deletedUser = players.filter( function(element) {
+            if (room !== socket.id) {
+                var deletedUser = players.filter(function (element) {
                     return element.playerId != socket.id
                 })
                 players = deletedUser
+
+                rooms_players[room] = filterPlayers(players, room)
+
                 pokerIo.to(room).emit('user-left', socket.id, room)
             }
+
         }
     })
 
-    function minimumPlayers(room){
+    function minimumPlayers(room) {
         const checkPlayers = Array.from(rooms_players[room])
-        if(checkPlayers.length > 1){
-            console.log("game started in room: "+room )
+        if (checkPlayers.length > 1) {
+            console.log("game started in room: " + room)
             socket.to(room).emit('start-game', true, checkPlayers[0], room)
             clearInterval(checkGameStart)
         }
     }
 
-    socket.on('give-cards-to-players', (deck, room) => {
+    socket.on('store-deck', (deck, room) => {
 
-        decks.push({"room": room, "deck": deck})
+        var clearedRoom = decks.filter(function (element) {
+            return element.room != room
+        })
 
-        var RoomCards = decks.filter(function(element){
+        decks = clearedRoom
+
+        decks.push({ "room": room, "deck": deck })
+
+        var RoomCards = decks.filter(function (element) {
             return element.room == room
         })
 
-        var currentRoomCards = RoomCards.map(function(element){
+        var currentRoomCards = RoomCards.map(function (element) {
             return element.deck
         })
 
         rooms_decks[room] = currentRoomCards
+    })
 
+    socket.on('give-cards-to-players', (firstPlayer, room) => {
         //rooms_decks[room] contains the array of cards under another array the first [0] is to access the cards array
-        console.log(rooms_decks[room][0][0])
+        rooms_players[room] = playerRotation(rooms_players[room])
+
+        if (firstPlayer != rooms_players[room][0]) {
+            const card_1 = rooms_decks[room][0].pop()
+            const card_2 = rooms_decks[room][0].pop()
+
+            console.log("number of cards:" + rooms_decks[room][0].length)
+
+            socket.to(room).emit('new-hand', card_1, card_2, room, rooms_players[room][0])
+        } else {
+            socket.to(room).emit('start-round', room)
+        }
 
     })
 

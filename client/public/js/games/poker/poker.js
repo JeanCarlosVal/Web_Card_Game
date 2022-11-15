@@ -115,6 +115,8 @@ poker.on('update-game', data => {
 poker.on('user-left', (id, room) => {
     document.getElementById(id).style.visibility = "hidden"
     document.getElementById(id).id = "player"
+    document.getElementById(id + "-status").id = "player-status"
+    document.getElementById(id + "-chips").id = "player-chips"
 
     updatePage(document.getElementById("game"), room)
 })
@@ -126,11 +128,37 @@ poker.on('start-game', (response, playerTurn, room) => {
 
         currentDeck = rules.startRound()
 
-        updatePage(document.getElementById("game"),room)
+        updatePage(document.getElementById("game"), room)
+
         if (idPlaying == assignedId) {
-            poker.emit('give-cards-to-players', currentDeck.cards, room)
+            const card1 = currentDeck.cards.pop()
+            console.log(currentDeck.cards)
+            const card2 = currentDeck.cards.pop()
+            console.log(currentDeck.cards)
+
+            renderHand(card1, card2)
+            poker.emit('store-deck', currentDeck.cards, room)
+            poker.emit('give-cards-to-players', idPlaying, room)
         }
     }
+})
+
+poker.on('new-hand', (card1, card2, room, player) => {
+    if(player == assignedId){
+        renderHand(card1,card2)
+        poker.emit('give-cards-to-players', idPlaying, room)
+    }
+})
+
+poker.on('start-round', room => {
+    document.getElementById('table-card-1').style.visibility = "visible"
+    document.getElementById('table-card-2').style.visibility = "visible"
+    document.getElementById('table-card-3').style.visibility = "visible"
+    document.getElementById('table-card-4').style.visibility = "visible"
+    document.getElementById('table-card-5').style.visibility = "visible"
+    document.getElementById(idPlaying).style.borderColor = "yellow"
+
+    updatePage(document.getElementById("game"), room)
 })
 
 //listeners for dynamic content in page
@@ -169,6 +197,35 @@ function assignPlayerHtml(id) {
     document.getElementById("player").id = id
     document.getElementById("player-status").id = id + "-status"
     document.getElementById("player-chips").id = id + "-chips"
-    document.getElementById("user-card-1").id = id + "-card-1"
-    document.getElementById("user-card-2").id = id + "-card-2"
+}
+
+function renderHand(card1, card2) {
+
+    const userCard1 = document.getElementById("user-card-1")
+    const userCard2 = document.getElementById("user-card-2")
+    
+    var userCard1Color
+    var userCard2Color
+
+    if (card1.suit === "♣" || card1.suit === "♠") {
+        userCard1Color = "black"
+    } else {
+        userCard1Color = "red"
+    }
+
+    if (card2.suit === "♣" || card2.suit === "♠") {
+        userCard2Color = "black"
+    } else {
+        userCard2Color = "red"
+    }
+
+    userCard1.style.backgroundImage = "none"
+    userCard1.innerText = card1.suit
+    userCard1.classList.add(userCard1Color)
+    userCard1.dataset.value = `${card1.value} ${card1.suit}`
+
+    userCard2.style.backgroundImage = "none"
+    userCard2.innerText = card2.suit
+    userCard2.classList.add(userCard2Color)
+    userCard2.dataset.value = `${card2.value} ${card2.suit}`
 }
