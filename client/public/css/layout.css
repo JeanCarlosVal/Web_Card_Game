@@ -44,6 +44,9 @@ body {
     padding: 20px;
     border: 1px solid #888;
     width: 75%; /* Could be more or less, depending on screen size */
+    border-radius: 25px;
+    border: 2px solid #1abc9c;
+    padding: 20px; 
   }
   
   /* The Close Button */
@@ -116,3 +119,99 @@ body {
 * {
     box-sizing: border-box;
 }
+
+h2 {
+    text-align: center;
+}
+
+form {
+    text-align: center;
+}
+
+.content_img{
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin:auto;
+    right: 100px;
+
+}
+
+.content_img div{
+    position: relative;
+    background: black;
+    color: white;
+    margin-bottom: 0px;
+    top: -200px;
+    left: 100px;
+    font-family: sans-serif;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: visibility 0s, opacity 0.5s linear; 
+    transition: visibility 0s, opacity 0.5s linear;
+}
+
+.content_img:hover{
+    cursor: pointer;
+}	
+
+.content_img:hover div{
+    width: 150px;
+    padding: 8px 15px;
+    visibility: visible;
+    opacity: 0.7; 
+}
+
+.ProfPic {
+    background-color: black;
+    color: white;
+    opacity: 0.7;
+    border: none;
+}
+
+
+#logout-btn {
+    border-radius: 25px;
+    border: 2px solid #000000;
+    padding: 10px; 
+    width: 150px;
+    height: 35px;
+    position: absolute;
+    top: 30px;
+}
+
+#imageUpload
+{
+    display: none;
+}
+#profileImage
+{
+    cursor: pointer;
+}
+#profile-container {
+    position:absolute;
+    right: 45%;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+}
+#profile-container img {
+    width: 150px;
+    height: 150px;
+}
+
+#style {
+    border-radius: 25px;
+    border: 2px solid #1abc9c;
+    padding: 20px; 
+    width: 200px;
+    height: 15px;
+    text-align: center;   
+}
+
+
