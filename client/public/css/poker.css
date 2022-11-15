@@ -1,0 +1,680 @@
+.message{
+    position: absolute;
+    z-index: 10;
+    left: 35%;
+    font-size: 3rem;
+    top: 24rem;
+    color: white;
+}
+
+.table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 900px;
+    height: 450px;
+    background: #a84909;
+    border-radius: 200px;
+    margin-top: 5rem;
+    border: 7px solid black
+}
+
+.player1 {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 5px solid grey;
+    background-color: black;
+    border-radius: 100px;
+    visibility: hidden;
+}
+
+.player2 {
+    position: relative;
+    top: 14.5rem;
+    width: 100px;
+    height: 100px;
+    border: 5px solid grey;
+    background-color: black;
+    border-radius: 100px;
+    visibility: hidden;
+}
+
+.player3 {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 5px solid grey;
+    background-color: black;
+    left: 24rem;
+    bottom: 15.8rem;
+    border-radius: 100px;
+    visibility: hidden;
+}
+
+.player4 {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 5px solid grey;
+    background-color: black;
+    left: 24rem;
+    top: 5rem;
+    border-radius: 100px;
+    visibility: hidden;
+}
+
+.player5 {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 5px solid grey;
+    background-color: black;
+    left: 48.5rem;
+    bottom: 4rem;
+    border-radius: 100px;
+    visibility: hidden;
+}
+
+.player6 {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 5px solid grey;
+    background-color: black;
+    left: 48.5rem;
+    bottom: 31.5rem;
+    border-radius: 100px;
+    visibility: hidden;
+}
+
+.userpokertemplate {
+    height: 195px;
+    border: 5px solid black;
+    background-color: #a84909;
+    margin-top: 70px;
+    border-top-right-radius: 200px;
+    border-top-left-radius: 200px;
+    display: none;
+}
+
+.user-card-1 {
+    position: relative;
+    width: 100px;
+    height: 138px;
+    border: 3px solid black;
+    background-color: white;
+    left: 25rem;
+    top: 17px;
+    border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+}
+
+.user-card-1.red{
+    color: red;
+}
+
+.user-card-1.black{
+    color: black;
+}
+
+.user-card-1::before,
+.user-card-1::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.user-card-1::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.user-card-1::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
+}
+
+.user-card-2 {
+    position: relative;
+    width: 100px;
+    height: 138px;
+    border: 3px solid black;
+    background-color: white;
+    left: 32rem;
+    bottom: 7.70rem;
+    border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+}
+
+.user-card-2.red{
+    color: red;
+}
+
+.user-card-2.black{
+    color: black;
+}
+
+.user-card-2::before,
+.user-card-2::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.user-card-2::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.user-card-2::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
+}
+
+.fold-button {
+    position: absolute;
+    bottom: 7rem;
+    left: 40rem;
+    background: #94051d;
+    border-radius: 11px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    justify-content: center;
+    padding-top: .2em;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 100px;
+    height: 30px;
+    border: 0;
+    bottom: 3rem;
+}
+
+.fold-button:hover {
+    background: #d3465e;
+}
+
+.check-button {
+    position: absolute;
+    bottom: 9rem;
+    left: 40rem;
+    background: #06c857;
+    border-radius: 11px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    justify-content: center;
+    padding-top: .2em;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 200px;
+    height: 30px;
+    border: 0;
+    bottom: 5rem;
+}
+
+.check-button:hover {
+    background: #34ed81;
+}
+
+.raise-button {
+    position: absolute;
+    bottom: 7rem;
+    left: 46.3rem;
+    background: #d19017;
+    border-radius: 11px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    justify-content: center;
+    padding-top: .2em;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 100px;
+    height: 30px;
+    border: 0;
+    bottom: 3rem;
+}
+
+.raise-button:hover {
+    background: #e0a02a;
+}
+
+.user-options {
+    position: relative;
+    bottom: 9.50rem;
+    left: 8.5rem;
+    width: 0%;
+    height: 0%;
+}
+
+.slidecontainer {
+    position: relative;
+    width: 20rem;
+    left: 36.5rem;
+    bottom: 1rem;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+.deck-of-cards {
+    position: relative;
+    width: 33rem;
+    height: 10rem;
+    bottom: 29rem;
+    left: 11rem;
+}
+
+.table-card-1 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 138px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.8rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
+}
+
+.table-card-1.red{
+    color: red;
+}
+
+.table-card-1.black{
+    color: black;
+}
+
+.table-card-1::before,
+.table-card-1::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-1::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-1::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
+}
+
+.table-card-2 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 138px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
+}
+
+.table-card-2.red{
+    color: red;
+}
+
+.table-card-2.black{
+    color: black;
+}
+
+.table-card-2::before,
+.table-card-2::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-2::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-2::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
+}
+
+.table-card-3 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 138px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
+}
+
+.table-card-3.red{
+    color: red;
+}
+
+.table-card-3.black{
+    color: black;
+}
+
+.table-card-3::before,
+.table-card-3::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-3::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-3::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
+}
+
+.table-card-4 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 138px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
+}
+
+.table-card-4.red{
+    color: red;
+}
+
+.table-card-4.black{
+    color: black;
+}
+
+.table-card-4::before,
+.table-card-4::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-4::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-4::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
+}
+
+
+.table-card-5 {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 138px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 3.6rem;
+    padding-left: 1.7rem;
+    padding-top: 2rem;
+    background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg");
+    background-size: contain;
+    visibility: hidden;
+}
+
+.table-card-5.red{
+    color: red;
+}
+
+.table-card-5.black{
+    color: black;
+}
+
+.table-card-5::before,
+.table-card-5::after {
+    position: absolute;
+    content: attr(data-value);
+    font-size: 1.2rem;
+}
+
+.table-card-5::before {
+    top: .5rem;
+    left: .5rem;
+}
+
+.table-card-5::after {
+    bottom: .5rem;
+    right: .5rem;
+    transform: rotate(180deg);
+}
+
+.player1-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    left: 3rem;
+    top: 5rem;
+}
+
+.player2-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    left: 3rem;
+    bottom: 5rem;
+}
+
+.player3-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    top: 5.7rem;
+    left: 1rem;
+
+}
+
+.player4-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    bottom: 5.4rem;
+    left: 1rem;
+}
+
+.player5-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    right: 1rem;
+    bottom: 5.3rem;
+}
+
+.player6-info {
+    position: relative;
+    width: 10rem;
+    height: 5rem;
+    right: 1rem;
+    top: 5.3rem;
+}
+
+.game {
+    display: none;
+}
+
+.join-room-button {
+    background: #06c857;
+    border-radius: 11px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    justify-content: center;
+    padding-top: .2em;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 200px;
+    height: 30px;
+    border: 0;
+    position: relative;
+    left: 32%;
+}
+
+.createRoomDisplay {
+    display: block;
+    margin-left: 5rem;
+    margin-top: 2rem;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+}
+
+.createRoomDisplay p {
+    font-size: 30px;
+}
+
+.createRoomDisplay button {
+    background: #06c857;
+    border-radius: 11px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: Mija, -apple-system, BlinkMacSystemFont, Roboto, "Roboto Slab", "Droid Serif", "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    justify-content: center;
+    padding-top: .2em;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 200px;
+    height: 30px;
+    border: 0;
+}
+
+.createRoomDisplay input {
+    width: 20%;
+    height: 30px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-right: 40rem;
+    padding: 12px;
+}
+
+.rooms-table {
+    margin-top: 5rem;
+    margin-left: 5rem;
+    margin-right: 10rem;
+}
+
+.rooms-table table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border-spacing: 2px;
+}
+
+.rooms-table td,
+th {
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+.rooms-table td {
+    padding-left: 3rem;
+}
+
+.rooms-table tr:nth-child(even) {
+    background-color: #afaeae;
+}

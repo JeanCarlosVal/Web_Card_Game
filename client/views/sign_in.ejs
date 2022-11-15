@@ -1,0 +1,14 @@
+<h2> Sign In </h2>
+<% if (locals.errorMessage != null) { %>
+<%= errorMessage + " did you mean to " %> 
+<a href="/sign_up">create an account?</a>
+<%}%>
+
+    <form action="/sign_in" method="POST">
+        <label> Username </label>
+        <input type="text" name="username">
+        <label> Password </label>
+        <input type="password" name="password">
+        <a href="/">cancel</a>
+        <button type="submit"> Log In! </button>
+    </form>
