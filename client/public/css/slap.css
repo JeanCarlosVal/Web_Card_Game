@@ -1,0 +1,22 @@
+#play-area {
+    background-color: aquamarine;
+}
+#play-table {
+    background-color: brown;
+    width:500px;
+    height:500px;
+    border-radius:75%;
+}
+#deck {
+    background-color: wheat;
+    width:100px;
+    height:175px;
+    margin:auto;
+    border: 3px solid black;
+}
+.player {
+    width:10%;
+    height:10%;
+    border:2px double black;
+    border-radius:10%;
+}
