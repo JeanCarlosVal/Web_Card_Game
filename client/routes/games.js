@@ -7,18 +7,12 @@ router.get('/',(req,res) => {
     res.render('games/index')
 })
 
-router.get('/hilo', async (req, res) => {
-    //get top 5 users by hilo score to export to leaderboard;
-   let hiloLeaders = await User.find().sort({"hi_lo.wins" : -1}).limit(5);
-   console.log(hiloLeaders);
-    res.render('games/hilo', {leaders: hiloLeaders});
+router.get('/hilo',(req, res) => {
+    res.render('games/hilo');
 });
 
-router.get('/poker', async (req,res) => {
-    let pokerLeaders = await User.find().sort({"poker.wins" : -1}).limit(5);
-    console.log(pokerLeaders);
-     res.render('games/poker', {leaders: pokerLeaders});
+router.get('/poker',(req,res) => {
+    res.render('games/poker');
 })
-
 
 module.exports = router;
