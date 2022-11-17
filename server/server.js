@@ -81,10 +81,13 @@ pokerIo.on("connection", socket => {
         } catch (error) {
             socket.emit("create-status", false)
         }
-    socket.on("join-room" , room => {
+
+    })
+
+    socket.on("join-room", room => {
         socket.join(room)
         console.log(socket.id + " joined room: " + room)
-        
+
     })
 
     socket.on("see-rooms", eval => {
@@ -179,8 +182,6 @@ pokerIo.on("connection", socket => {
             const card_1 = rooms_decks[room][0].pop()
             const card_2 = rooms_decks[room][0].pop()
 
-            console.log("number of cards:" + rooms_decks[room][0].length)
-
             socket.to(room).emit('new-hand', card_1, card_2, room, rooms_players[room][0])
         } else {
             socket.to(room).emit('start-round', room)
@@ -188,7 +189,16 @@ pokerIo.on("connection", socket => {
 
     })
 
-})
+    socket.on('next-player', (room,starting_player) => {
+        rooms_players[room] = playerRotation(rooms_players[room])
+
+        if(starting_player != rooms_players[room][0]){
+            socket.to(room).emit('player-turn',rooms_players[room][0])
+        } else {
+            rooms_players[room] = playerRotation(rooms_players[room])
+            socket.to(room).emit('start-new-betting-round', rooms_players[room][0])
+        }
+    })
 })
 
 const slap = io.of('/slap'); // namespace
@@ -196,7 +206,7 @@ const Slap = require('./source/games/slap/Slap.js'); // game class
 const LobbyManager = require('./source/LobbyManager.js');
 var slapcap = 2;
 var slaplm = new LobbyManager(Slap, slap, slapcap);
-slap.on('connection', (socket)=> {
+slap.on('connection', (socket) => {
     console.log(`${socket.id} has made a connection to Slap.`);
     socket.on('create-lobby', (pkg) => {
         var lid = "lob:" + pkg.lobbyid;
@@ -207,7 +217,7 @@ slap.on('connection', (socket)=> {
             console.log(typeof game);
             game.addPlayer(socket.id);
             console.log("made lobby " + pkg.lobbyid);
-            socket.emit("joined-lobby", {players:[socket.id], lobbyid:lid, yourid:socket.id});
+            socket.emit("joined-lobby", { players: [socket.id], lobbyid: lid, yourid: socket.id });
         }
         else {
             console.log("failed to make lobby");
@@ -222,8 +232,8 @@ slap.on('connection', (socket)=> {
             var game = slaplm.getLobby(pkg.lobbyid);
             game.addPlayer(socket.id);
             var x = Array.from(slap.adapter.rooms.get(pkg.lobbyid));
-            socket.emit('joined-lobby', {players:x, yourid:socket.id, lobbyid:pkg.lobbyid});
-            socket.to(pkg.lobbyid).emit('player-join', {joiner:socket.id}); // socket.to sends to sender as well??
+            socket.emit('joined-lobby', { players: x, yourid: socket.id, lobbyid: pkg.lobbyid });
+            socket.to(pkg.lobbyid).emit('player-join', { joiner: socket.id }); // socket.to sends to sender as well??
         }
         else {
             console.log("failed to join lobby");
@@ -244,7 +254,7 @@ slap.on('connection', (socket)=> {
     });
     socket.on('leave-lobby', (pkg) => {
         slaplm.leaveLobby(socket, slap, pkg.lobbyid);
-    });  
+    });
     socket.on("see-lobbies", (pkg) => {
         console.log(socket.id + " request too see lobbies.");
         var allRooms = Array.from(slap.adapter.rooms.keys());
@@ -272,20 +282,20 @@ slap.on('connection', (socket)=> {
         const roomSize = users.length;
         if (roomSize >= 8) {
             console.log("unavailable");
-            socket.emit('is-room-available', {availability:false,roomName:room,size:roomSize});
+            socket.emit('is-room-available', { availability: false, roomName: room, size: roomSize });
         }
         else {
             console.log("available");
-            socket.emit('is-room-available', {availability:true,roomName:room,size:roomSize});
+            socket.emit('is-room-available', { availability: true, roomName: room, size: roomSize });
         }
     })
     socket.on('put', (pkg) => {
         console.log(socket.id + " put down a card.")
-        
+
         var lobby = slaplm.getLobby(pkg.lobbyid);
         lobby.play("put", socket.id);
         var cardPut = lobby.deck.getTop(0).toString();
-        socket.to(pkg.lobbyid).emit('enemy-put', {enemy:socket.id, card:cardPut});
+        socket.to(pkg.lobbyid).emit('enemy-put', { enemy: socket.id, card: cardPut });
         socket.to(lobby.currentPlayer.socketid).emit('your-turn');
     });
     socket.on('slap', (pkg) => {

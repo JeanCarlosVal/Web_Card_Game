@@ -11,6 +11,14 @@ var idPlaying
 
 let currentDeck = []
 
+let raise = 0
+
+let bet = 0
+
+var startin_player
+
+var assignedRoom
+
 var poker = io("http://localhost:8080/poker")
 
 var createRoom = document.getElementById("createRoom")
@@ -76,6 +84,7 @@ poker.on('is-room-available', (availability, room, size) => {
 
 poker.on("create-status", (response, onlineId, room) => {
     if (response) {
+        assignedRoom = room
         document.getElementById("createRoomDisplay").style.display = "none"
         document.getElementById("rooms-table").style.display = "none"
         document.getElementById("game").style.display = "block"
@@ -96,6 +105,7 @@ function join_game_lobby(roomName) {
 
 poker.on('joined-progress-game-status', (response, onlineId, data, room) => {
     if (response) {
+        assignedRoom = room
         document.getElementById("createRoomDisplay").style.display = "none"
         document.getElementById("rooms-table").style.display = "none"
         document.getElementById("playerOptions").style.display = "block"
@@ -144,8 +154,8 @@ poker.on('start-game', (response, playerTurn, room) => {
 })
 
 poker.on('new-hand', (card1, card2, room, player) => {
-    if(player == assignedId){
-        renderHand(card1,card2)
+    if (player == assignedId) {
+        renderHand(card1, card2)
         poker.emit('give-cards-to-players', idPlaying, room)
     }
 })
@@ -159,6 +169,19 @@ poker.on('start-round', room => {
     document.getElementById(idPlaying).style.borderColor = "yellow"
 
     updatePage(document.getElementById("game"), room)
+
+    startin_player = idPlaying
+})
+
+poker.on('player-turn', player => {
+    idPlaying = player
+    document.getElementById(idPlaying).style.borderColor = "yellow"
+})
+
+poker.on('start-new-betting-round', player => {
+    console.log("new-round")
+    startin_player = player
+    idPlaying = player
 })
 
 //listeners for dynamic content in page
@@ -166,7 +189,33 @@ document.querySelector('body').addEventListener('click', function (e) {
     //only if its the turn of the player enable actions
     if (idPlaying == assignedId) {
         if (e.target.id == 'check') {
-            console.log("checked")
+            if (raise == 0) {
+                document.getElementById(assignedId + "-status").innerText = "Checked"
+                document.getElementById(idPlaying).style.borderColor = "lightgreen"
+
+                updatePage(document.getElementById("game"), assignedRoom)
+
+                poker.emit('next-player', assignedRoom, startin_player)
+            }
+        }
+
+        if (e.target.id == 'fold') {
+            document.getElementById(assignedId + "-status").innerText = "Folded"
+            document.getElementById(idPlaying).style.borderColor = "red"
+
+            updatePage(document.getElementById("game"),assignedRoom)
+
+            poker.emit('next-player',assignedRoom, startin_player)
+        }
+
+        if (e.target.id == 'raise') {
+
+            document.getElementById(assignedId + "-status").innerHTML = "Raised by " + document.getElementById("demo").innerHTML
+            document.getElementById(idPlaying).style.borderColor = "gray"
+
+            updatePage(document.getElementById("game"),assignedRoom)
+
+            poker.emit('next-player',assignedRoom,startin_player)
         }
     }
 
@@ -203,7 +252,7 @@ function renderHand(card1, card2) {
 
     const userCard1 = document.getElementById("user-card-1")
     const userCard2 = document.getElementById("user-card-2")
-    
+
     var userCard1Color
     var userCard2Color
 
