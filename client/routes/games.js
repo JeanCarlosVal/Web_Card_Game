@@ -19,3 +19,8 @@ router.get('/slap', (req,res) => {
 })
 
 module.exports = router
+router.get('/war', (req, res) => {
+    res.render('games/war');
+})
+
+module.exports = router;
