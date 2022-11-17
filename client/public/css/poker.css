@@ -678,3 +678,9 @@ th {
 .rooms-table tr:nth-child(even) {
     background-color: #afaeae;
 }
+
+.pot{
+    position: absolute;
+    left: 13rem;
+    top: 46rem;
+}
