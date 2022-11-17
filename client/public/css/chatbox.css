@@ -1,0 +1,44 @@
+#chatbox {
+    display:table-cell;
+    background-color:rebeccapurple;
+    border:2pxx solid black;
+    width:0;
+    /* Open/Close */
+    max-width: 20%;
+    overflow: hidden;
+    transition: max-width 0.2s ease-out;
+}
+.closed {
+    width:0;
+}
+.open {
+    width:20%;
+}
+#chatbox-open-close {
+    background-color: coral;
+    position:absolute;
+    height:50px;
+    width:75px;
+    margin:5px;
+    top:85px;
+}
+#feed {
+    background-color:goldenrod;
+    margin-top:3.75rem;
+    margin-bottom:3.75rem;
+    height:86%;
+}
+.message {
+    background-color:orange;
+    list-style:none;
+}
+#form {
+    background-color:grey;
+    height:10%;
+}
+#text {
+    background-color:white;
+}
+#send {
+    background-color:red;
+}

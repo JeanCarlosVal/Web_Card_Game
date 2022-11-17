@@ -204,14 +204,6 @@ router.post('/game_results', async (req, res) => {
 
 })
 
-router.get('/realtime', (req, res) => {
-    res.render('realtime');
-})
-
-router.get('/slap', (req, res) => {
-    res.render('slap');
-})
-
 //endpoint to update user game stats when games end 
 router.post('/game_results', async (req, res) => {
     let obj = req.body;

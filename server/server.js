@@ -6,10 +6,6 @@ const io = require('socket.io')(8080, {
 
 let pokerIo = io.of("/poker")
 
-io.on("connection", socket => {
-    console.log("root connection: " + socket.id)
-})
-
 let rooms_data = {}
 
 let players = []
@@ -278,7 +274,11 @@ slap.on('connection', (socket)=> {
             console.log("available");
             socket.emit('is-room-available', {availability:true,roomName:room,size:roomSize});
         }
-    })
+    });
+    socket.on('chat-message', (pkg) => {
+        console.log("chat message: " + pkg.message + pkg.lobbyid);
+        slap.to(pkg.lobbyid).emit("chat-message", {sender:pkg.sender, message:pkg.message});
+    });
     socket.on('put', (pkg) => {
         console.log(socket.id + " put down a card.")
         
@@ -308,3 +308,93 @@ slap.on('connection', (socket)=> {
 
 });
 
+
+const crazy8 = io.of('/crazy8'); // namespace
+const Crazy8 = require('./source/games/crazy8/Crazy8.js'); // game class
+var c8cap = 2;
+var c8lm = new LobbyManager(Crazy8, crazy8, c8cap);
+crazy8.on('connection', (socket)=> {
+    console.log(`${socket.id} has made a connection to Crazy8.`);
+    socket.on('create-lobby', (pkg) => {
+        var lid = "lob:" + pkg.lobbyid;
+        console.log(socket.id + " creating lobby " + pkg.lobbyid);
+        var success = c8lm.createLobby(socket, "lob:" + pkg.lobbyid);
+        if (success) {
+            var game = c8lm.getLobby("lob:" + pkg.lobbyid);
+            console.log(typeof game);
+            game.addPlayer(socket.id);
+            console.log("made lobby " + pkg.lobbyid);
+            socket.emit("joined-lobby", {players:[socket.id], lobbyid:lid, yourid:socket.id});
+        }
+        else {
+            console.log("failed to make lobby");
+            socket.emit("error", success + " already exists!");
+        }
+    });
+    socket.on('join-lobby', (pkg) => {
+        console.log(socket.id + " wants to join " + pkg.lobbyid);
+        var success = c8lm.joinLobby(socket, pkg.lobbyid);
+        if (success) {
+            console.log(socket.id + " joined lobby: " + pkg.lobbyid);
+            var game = c8lm.getLobby(pkg.lobbyid);
+            game.addPlayer(socket.id);
+            var x = Array.from(crazy8.adapter.rooms.get(pkg.lobbyid));
+            socket.emit('joined-lobby', {players:x, yourid:socket.id, lobbyid:pkg.lobbyid});
+            socket.to(pkg.lobbyid).emit('player-join', {joiner:socket.id}); // socket.to sends to sender as well??
+        }
+        else {
+            console.log("failed to join lobby");
+        }
+
+        // check if lobby is full
+        if (crazy8.adapter.rooms.get(pkg.lobbyid).size == c8cap) {
+            console.log("pkg.lobbyid " + pkg.lobbyid);
+            var game = c8lm.getLobby(pkg.lobbyid);
+            game.start();
+            var cp = game.currentPlayer.socketid;
+            crazy8.in(pkg.lobbyid).emit('game-prep', {});
+            setTimeout(() => {
+                crazy8.in(pkg.lobbyid).emit('game-start', {});
+                crazy8.to(cp).emit('your-turn', {})
+            }, 2500);
+        }
+    });
+    socket.on('leave-lobby', (pkg) => {
+        c8lm.leaveLobby(socket, crazy8, pkg.lobbyid);
+    });  
+    socket.on("see-lobbies", (pkg) => {
+        console.log(socket.id + " request too see lobbies.");
+        var allRooms = Array.from(crazy8.adapter.rooms.keys());
+        var openRooms = [];
+        allRooms.forEach((room) => {
+            console.log(room);
+            console.log(crazy8.adapter.rooms.get(room).size);
+            console.log(room.startsWith("private"));
+            // if you want a lobby to be private, start it with 'private'
+            if (crazy8.adapter.rooms.get(room).size <= c8cap && room.startsWith("lob:") && !room.startsWith("prv:")) {
+                console.log("INSIDE");
+                openRooms.push(room);
+            }
+        });
+        socket.emit('fetched-lobbies', openRooms);
+    })
+    socket.on("check-lobby", room => {
+        if (room == null || room == undefined) {
+            console.log("bad room has been found.")
+            return;
+        }
+        console.log("checking room: " + room);
+        const map = crazy8.adapter.rooms;
+        const users = Array.from(map.get(room));
+        const roomSize = users.length;
+        if (roomSize >= 8) {
+            console.log("unavailable");
+            socket.emit('is-room-available', {availability:false,roomName:room,size:roomSize});
+        }
+        else {
+            console.log("available");
+            socket.emit('is-room-available', {availability:true,roomName:room,size:roomSize});
+        }
+    })
+
+});

@@ -1,6 +1,5 @@
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
-import { buildChatBox } from "/js/chatbox.js";
-const socket = io("http://localhost:8080/slap");
+const socket = io("http://localhost:8080/crazy8");
 
 // 3 displays
 var prelobby = document.getElementById("pre-lobby");
@@ -95,7 +94,7 @@ socket.on("player-join", (pkg) => {
 socket.on("joined-lobby", (pkg) => {
     // change displays
     prelobby.style.display = "none";
-    inlobby.style.display = "table-cell";
+    inlobby.style.display = "block";
 
     // show players in the room
     var playerArr = pkg.players;
@@ -108,76 +107,14 @@ socket.on("joined-lobby", (pkg) => {
 
     yourid = pkg.yourid;
     yourlobby = pkg.lobbyid;
-
-    buildChatBox(socket, yourid, yourlobby);
 });
 
 //
 // GAME INFORMATION
 //
 
-var isTurn = false;
-var numCards = 0;
-
-socket.on('game-prep', (pkg) => {
-    inlobby.style.display = "none";
-    prep.style.display = "table-cell";
-});
-
-socket.on('game-start', (pkg) => {
-    prep.style.display = "none";
-    game.style.display = "table-cell";
-
-    if (pkg.currentPlayer == yourid) {
-        isTurn = true;
-    }
-
-    newUpdate("Game Started.");
-});
-
-socket.on('your-turn', (pkg) => {
-    isTurn = true;
-});
-
-socket.on('enemy-first', (pkg) => {
-    newUpdate("Someone hit the deck!");
-});
-
-socket.on('you-first', (pkg) => {
-    newUpdate("you slapped first!");
-    numCards += pkg.deckSize;
-});
-
-socket.on('too-slow', (pkg) => {
-    newUpdate("Someone was faster than you!");
-});
-
-socket.on('bad-slap', (pkg) => {
-    newUpdate("You slapped with no combo!");
-    numCards--;
-});
-
-slap.addEventListener('click', (e) => {
-    e.preventDefault();
-    socket.emit('slap', {
-        slapperid:yourid,
-        lobbyid:yourlobby
-    });
-});
-
-play.addEventListener('click', (e) => {
-    if (!isTurn) {
-        console.log("it's not ur turn!");
-        return;
-    }
-    isTurn = false;
-    e.preventDefault();
-    socket.emit('put', {
-        playerid:yourid,
-        lobbyid:yourlobby
-    });
-});
-
 function newUpdate(text) {
-    console.log(text);
+    var up = document.createElement("li");
+    up.innerText = text;
+    updates.appendChild(text);
 }

@@ -2,11 +2,15 @@
     display: none;
 }
 
+#pre-lobby {
+    background-color:purple;
+}
 #in-lobby {
+    background-color: palevioletred;
     display:none;
 }
-
 #prep {
+    background-color:peru;
     display:none;
 }
 
