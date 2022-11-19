@@ -19,6 +19,8 @@ var startin_player
 
 var assignedRoom
 
+let firstThree = true
+
 var poker = io("http://localhost:8080/poker")
 
 var createRoom = document.getElementById("createRoom")
@@ -34,7 +36,8 @@ seerooms.addEventListener("click", e => {
     poker.emit("see-rooms")
     document.getElementById("rooms-table-body").innerHTML = ""
 })
-
+//-----------------------------------------------------------------------------------------------------
+//server listeners
 poker.on("assign-id", id => {
     assignedId = id
 })
@@ -142,9 +145,7 @@ poker.on('start-game', (response, playerTurn, room) => {
 
         if (idPlaying == assignedId) {
             const card1 = currentDeck.cards.pop()
-            console.log(currentDeck.cards)
             const card2 = currentDeck.cards.pop()
-            console.log(currentDeck.cards)
 
             renderHand(card1, card2)
             poker.emit('store-deck', currentDeck.cards, room)
@@ -174,16 +175,56 @@ poker.on('start-round', room => {
 })
 
 poker.on('player-turn', player => {
+
     idPlaying = player
     document.getElementById(idPlaying).style.borderColor = "yellow"
+    updatePage(document.getElementById("game"), assignedRoom)
+
 })
 
-poker.on('start-new-betting-round', player => {
-    console.log("new-round")
+poker.on('start-new-betting-round', (player, players, card) => {
+
+    if (document.getElementById("table-card-5").innerText != "") {
+        console.log("round ended")
+    } else {
+        startin_player = player
+        idPlaying = player
+
+        if (idPlaying == assignedId) {
+            clearRound(players, card)
+        }
+
+        document.getElementById(idPlaying).style.borderColor = "yellow"
+
+        updatePage(document.getElementById("game"), assignedRoom)
+    }
+})
+
+poker.on('first-betting-round', (card1, card2, card3, firstRound, players, player) => {
+    firstThree = firstRound
     startin_player = player
     idPlaying = player
+
+    players.forEach(element => {
+        document.getElementById(element + "-status").innerText = "Status"
+        document.getElementById(element).style.borderColor = "gray"
+    });
+
+    if (idPlaying == assignedId) {
+        render_firstThree_Cards(card1)
+        render_firstThree_Cards(card2)
+        render_firstThree_Cards(card3)
+    }
+
+    document.getElementById(idPlaying).style.borderColor = "yellow"
+
+    updatePage(document.getElementById("game"), assignedRoom)
 })
 
+poker.on('post-raise', value => {
+    raise = value
+})
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //listeners for dynamic content in page
 document.querySelector('body').addEventListener('click', function (e) {
     //only if its the turn of the player enable actions
@@ -195,7 +236,23 @@ document.querySelector('body').addEventListener('click', function (e) {
 
                 updatePage(document.getElementById("game"), assignedRoom)
 
-                poker.emit('next-player', assignedRoom, startin_player)
+                poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
+            } else {
+                document.getElementById(assignedId + "-status").innerText = "Call"
+                document.getElementById(idPlaying).style.borderColor = "lightgreen"
+
+                var chips = parseInt(document.getElementById(assignedId + "-chips").innerText)
+
+                bet = (raise - bet)
+
+                chips -= bet
+
+                document.getElementById(assignedId + "-chips").innerText = chips.toString()
+
+                updatePage(document.getElementById("game"), assignedRoom)
+
+                poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
+
             }
         }
 
@@ -203,19 +260,29 @@ document.querySelector('body').addEventListener('click', function (e) {
             document.getElementById(assignedId + "-status").innerText = "Folded"
             document.getElementById(idPlaying).style.borderColor = "red"
 
-            updatePage(document.getElementById("game"),assignedRoom)
+            updatePage(document.getElementById("game"), assignedRoom)
 
-            poker.emit('next-player',assignedRoom, startin_player)
+            poker.emit('player-folded', assignedRoom, assignedId, startin_player, firstThree, raise)
         }
 
         if (e.target.id == 'raise') {
 
-            document.getElementById(assignedId + "-status").innerHTML = "Raised by " + document.getElementById("demo").innerHTML
-            document.getElementById(idPlaying).style.borderColor = "gray"
+            document.getElementById(assignedId + "-status").innerHTML = "Raised by " + document.getElementById("demo").innerText
+            document.getElementById(idPlaying).style.borderColor = "lightgreen"
 
-            updatePage(document.getElementById("game"),assignedRoom)
+            var chips = parseInt(document.getElementById(assignedId + "-chips").innerText)
 
-            poker.emit('next-player',assignedRoom,startin_player)
+            raise = parseInt(document.getElementById("demo").innerText)
+
+            bet = raise
+
+            chips -= bet
+
+            document.getElementById(assignedId + "-chips").innerText = chips.toString()
+
+            updatePage(document.getElementById("game"), assignedRoom)
+
+            poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
         }
     }
 
@@ -232,7 +299,8 @@ document.querySelector('body').addEventListener('mousedown', function (e) {
     }
 
 })
-
+//-------------------------------------------------------------------------------------------------------------------------------
+//functions to render and update the client
 function updatePage(gamePage, room) {
     var html = gamePage.outerHTML
 
@@ -277,4 +345,62 @@ function renderHand(card1, card2) {
     userCard2.innerText = card2.suit
     userCard2.classList.add(userCard2Color)
     userCard2.dataset.value = `${card2.value} ${card2.suit}`
+}
+
+function clearRound(players, card) {
+    players.forEach(element => {
+        document.getElementById(element + "-status").innerText = "Status"
+        document.getElementById(element).style.borderColor = "gray"
+    });
+
+    var cardColor
+
+    if (card.suit === "♣" || card.suit === "♠") {
+        cardColor = "black"
+    } else {
+        cardColor = "red"
+    }
+
+    for (let i = 4; i <= 5; i++) {
+        if (document.getElementById("table-card-" + i).innerText == "") {
+            document.getElementById("table-card-" + i).style.backgroundImage = "none"
+            document.getElementById("table-card-" + i).innerText = card.suit
+            document.getElementById("table-card-" + i).classList.add(cardColor)
+            document.getElementById("table-card-" + i).dataset.value = `${card.value} ${card.suit}`
+            document.getElementById("table-card-" + i).style.bottom = "2rem"
+            break
+        }
+    }
+
+    if (document.getElementById("table-card-5").innerText != "") {
+        document.getElementById("table-card-1").style.bottom = ""
+        document.getElementById("table-card-2").style.bottom = ""
+        document.getElementById("table-card-3").style.bottom = ""
+        document.getElementById("table-card-4").style.bottom = ""
+        document.getElementById("table-card-5").style.bottom = ""
+
+
+    }
+}
+
+function render_firstThree_Cards(card) {
+
+    var cardColor
+
+    if (card.suit === "♣" || card.suit === "♠") {
+        cardColor = "black"
+    } else {
+        cardColor = "red"
+    }
+
+    for (let i = 1; i <= 3; i++) {
+        if (document.getElementById("table-card-" + i).innerText == "") {
+            document.getElementById("table-card-" + i).style.backgroundImage = "none"
+            document.getElementById("table-card-" + i).innerText = card.suit
+            document.getElementById("table-card-" + i).classList.add(cardColor)
+            document.getElementById("table-card-" + i).dataset.value = `${card.value} ${card.suit}`
+            document.getElementById("table-card-" + i).style.bottom = "2rem"
+            break
+        }
+    }
 }

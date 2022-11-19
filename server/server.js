@@ -20,25 +20,16 @@ let decks = []
 
 let rooms_decks = {}
 
+let rooms_players_playing = []
+
+let player_bet = {}
+
 //When user connects do this
 pokerIo.on("connection", socket => {
 
     //Decides which player is playing 
     function playerRotation(players) {
-        var k = 1
-        function reverse(arr, start, end) {
-            while (start < end) {
-                [arr[start], arr[end]] = [arr[end], arr[start]];
-                start++;
-                end--;
-            }
-        }
-
-        k %= players.length;
-
-        reverse(players, 0, (players.length - 1));
-        reverse(players, 0, (k - 1));
-        reverse(players, k, (players.length - 1));
+        players.push(players.shift())
 
         return players
     }
@@ -128,6 +119,7 @@ pokerIo.on("connection", socket => {
     })
 
     socket.on('disconnecting', e => {
+        delete player_bet[socket.id]
         clearInterval(checkGameStart)
         for (const room of socket.rooms) {
             if (room !== socket.id) {
@@ -148,6 +140,7 @@ pokerIo.on("connection", socket => {
         const checkPlayers = Array.from(rooms_players[room])
         if (checkPlayers.length > 1) {
             console.log("game started in room: " + room)
+            rooms_players_playing[room] = rooms_players[room]
             socket.to(room).emit('start-game', true, checkPlayers[0], room)
             clearInterval(checkGameStart)
         }
@@ -176,27 +169,147 @@ pokerIo.on("connection", socket => {
 
     socket.on('give-cards-to-players', (firstPlayer, room) => {
         //rooms_decks[room] contains the array of cards under another array the first [0] is to access the cards array
-        rooms_players[room] = playerRotation(rooms_players[room])
+        rooms_players_playing[room] = playerRotation(rooms_players_playing[room])
 
-        if (firstPlayer != rooms_players[room][0]) {
+        if (firstPlayer != rooms_players_playing[room][0]) {
             const card_1 = rooms_decks[room][0].pop()
             const card_2 = rooms_decks[room][0].pop()
 
-            socket.to(room).emit('new-hand', card_1, card_2, room, rooms_players[room][0])
+            socket.to(room).emit('new-hand', card_1, card_2, room, rooms_players_playing[room][0])
         } else {
             socket.to(room).emit('start-round', room)
         }
 
     })
 
-    socket.on('next-player', (room,starting_player) => {
-        rooms_players[room] = playerRotation(rooms_players[room])
+    socket.on('next-player', (room, starting_player, firstThree, raise) => {
+        rooms_players_playing[room] = playerRotation(rooms_players_playing[room])
 
-        if(starting_player != rooms_players[room][0]){
-            socket.to(room).emit('player-turn',rooms_players[room][0])
+        player_bet[socket.id] = raise
+
+        console.log(player_bet)
+        socket.to(room).emit('post-raise', raise)
+
+        if (starting_player != rooms_players_playing[room][0]) {
+            socket.to(room).emit('player-turn', rooms_players_playing[room][0])
         } else {
-            rooms_players[room] = playerRotation(rooms_players[room])
-            socket.to(room).emit('start-new-betting-round', rooms_players[room][0])
+            var raise_check = false
+
+            if (raise_check == false) {
+                for (let i = 0; i < rooms_players_playing[room].length; i++) {
+                    const element = rooms_players_playing[room][i];
+                    if (player_bet[element] != raise) {
+                        raise_check = false
+                        socket.to(room).emit('player-turn', rooms_players_playing[room][0])
+                        break
+                    } else {
+                        raise_check = true
+                    }
+                }
+            }
+            if (raise_check) {
+
+                if (firstThree) {
+                    rooms_players_playing[room] = playerRotation(rooms_players_playing[room])
+
+                    const table_card1 = rooms_decks[room][0].pop()
+                    const table_card2 = rooms_decks[room][0].pop()
+                    const table_card3 = rooms_decks[room][0].pop()
+
+                    socket.to(room).emit('first-betting-round', table_card1, table_card2, table_card3, false, rooms_players_playing[room], rooms_players_playing[room][0])
+
+                } else {
+                    var raise_check = false
+
+                    if (raise_check == false) {
+                        for (let i = 0; i < rooms_players_playing[room].length; i++) {
+                            const element = rooms_players_playing[room][i];
+                            if (player_bet[element] != raise) {
+                                raise_check = false
+                                socket.to(room).emit('player-turn', rooms_players_playing[room][0])
+                                break
+                            } else {
+                                raise_check = true
+                            }
+                        }
+                    }
+
+                    if (raise_check) {
+                        rooms_players_playing[room] = playerRotation(rooms_players_playing[room])
+
+                        const table_card = rooms_decks[room][0].pop()
+
+                        socket.to(room).emit('start-new-betting-round', rooms_players_playing[room][0], rooms_players_playing[room], table_card)
+                    }
+                }
+            }
+        }
+    })
+
+    socket.on('player-folded', (room, id, starting_player, firstThree, raise) => {
+        players = Array.from(rooms_players_playing[room])
+
+        const updatedPLayers = players.filter(function (element) {
+            return element != id
+        })
+        rooms_players_playing[room] = updatedPLayers
+
+        player_bet[socket.id] = raise
+        socket.to(room).emit('post-raise', raise)
+
+        if (starting_player != rooms_players_playing[room][0]) {
+            socket.to(room).emit('player-turn', rooms_players_playing[room][0])
+        } else {
+            var raise_check = false
+
+            if (raise_check == false) {
+                for (let i = 0; i < rooms_players_playing[room].length; i++) {
+                    const element = rooms_players_playing[room][i];
+                    if (player_bet[element] != raise) {
+                        raise_check = false
+                        socket.to(room).emit('player-turn', rooms_players_playing[room][0])
+                        break
+                    } else {
+                        raise_check = true
+                    }
+                }
+            }
+            if (raise_check) {
+                
+                if (firstThree) {
+                    rooms_players_playing[room] = playerRotation(rooms_players_playing[room])
+
+                    const table_card1 = rooms_decks[room][0].pop()
+                    const table_card2 = rooms_decks[room][0].pop()
+                    const table_card3 = rooms_decks[room][0].pop()
+
+                    socket.to(room).emit('first-betting-round', table_card1, table_card2, table_card3, false, rooms_players_playing[room], rooms_players_playing[room][0])
+
+                } else {
+                    var raise_check = false
+
+                    if (raise_check == false) {
+                        for (let i = 0; i < rooms_players_playing[room].length; i++) {
+                            const element = rooms_players_playing[room][i];
+                            if (player_bet[element] != raise) {
+                                raise_check = false
+                                socket.to(room).emit('player-turn', rooms_players_playing[room][0])
+                                break
+                            } else {
+                                raise_check = true
+                            }
+                        }
+                    }
+
+                    if (raise_check) {
+                        rooms_players_playing[room] = playerRotation(rooms_players_playing[room])
+
+                        const table_card = rooms_decks[room][0].pop()
+
+                        socket.to(room).emit('start-new-betting-round', rooms_players_playing[room][0], rooms_players_playing[room], table_card)
+                    }
+                }
+            }
         }
     })
 })
