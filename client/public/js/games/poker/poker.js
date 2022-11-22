@@ -5,6 +5,18 @@ window.onload = function () {
     document.getElementById("rooms").click();
 }
 
+// let testHand = [
+//     {"suit": "♦", "value": "A"},
+//     {"suit": "♣", "value": "5"},
+//     {"suit": "♦", "value": "K"},
+//     {"suit": "♣", "value": "4"},
+//     {"suit": "♦", "value": "Q"},
+//     {"suit": "♦", "value": "J"},
+//     {"suit": "♦", "value": "10"},
+// ]
+
+// rules.analyzeHand(testHand)
+
 var assignedId
 
 var idPlaying
@@ -20,6 +32,8 @@ var startin_player
 var assignedRoom
 
 let firstThree = true
+
+let hand = []
 
 var poker = io("http://localhost:8080/poker")
 
@@ -145,7 +159,9 @@ poker.on('start-game', (response, playerTurn, room) => {
 
         if (idPlaying == assignedId) {
             const card1 = currentDeck.cards.pop()
+            hand.push(card1)
             const card2 = currentDeck.cards.pop()
+            hand.push(card2)
 
             renderHand(card1, card2)
             poker.emit('store-deck', currentDeck.cards, room)
@@ -157,6 +173,8 @@ poker.on('start-game', (response, playerTurn, room) => {
 poker.on('new-hand', (card1, card2, room, player) => {
     if (player == assignedId) {
         renderHand(card1, card2)
+        hand.push(card1)
+        hand.push(card2)
         poker.emit('give-cards-to-players', idPlaying, room)
     }
 })
@@ -185,7 +203,9 @@ poker.on('player-turn', player => {
 poker.on('start-new-betting-round', (player, players, card) => {
 
     if (document.getElementById("table-card-5").innerText != "") {
-        console.log("round ended")
+        var handValue = rules.analyzeHand(hand)
+
+        poker.emit('submit-hand', handValue, assignedRoom)
     } else {
         startin_player = player
         idPlaying = player
@@ -193,6 +213,7 @@ poker.on('start-new-betting-round', (player, players, card) => {
         if (idPlaying == assignedId) {
             clearRound(players, card)
         }
+        hand.push(card)
 
         document.getElementById(idPlaying).style.borderColor = "yellow"
 
@@ -216,6 +237,10 @@ poker.on('first-betting-round', (card1, card2, card3, firstRound, players, playe
         render_firstThree_Cards(card3)
     }
 
+    hand.push(card1)
+    hand.push(card2)
+    hand.push(card3)
+
     document.getElementById(idPlaying).style.borderColor = "yellow"
 
     updatePage(document.getElementById("game"), assignedRoom)
@@ -223,6 +248,22 @@ poker.on('first-betting-round', (card1, card2, card3, firstRound, players, playe
 
 poker.on('post-raise', value => {
     raise = value
+})
+
+poker.on('done-submiting-hands', e => {
+    if(idPlaying == assignedId){
+        poker.emit('find-winner', assignedRoom)
+    }
+})
+
+poker.on('winner_hand', winner_hand => {
+    var handValue = rules.analyzeHand(hand)
+
+    if(handValue[winner_hand] != 0){
+        document.getElementById(assignedId+"-status").innerText = "Winner!!!"
+        updatePage(document.getElementById("game"), assignedRoom)
+        
+    }
 })
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //listeners for dynamic content in page

@@ -24,6 +24,8 @@ let rooms_players_playing = []
 
 let player_bet = {}
 
+let rooms_players_hand = []
+
 //When user connects do this
 pokerIo.on("connection", socket => {
 
@@ -131,6 +133,13 @@ pokerIo.on("connection", socket => {
                 rooms_players[room] = filterPlayers(players, room)
 
                 pokerIo.to(room).emit('user-left', socket.id, room)
+
+                var deleted_hands = rooms_players_hand.filter(function (element){
+                    return element.id != socket.id
+                })
+
+                
+                rooms_players_hand = deleted_hands
             }
 
         }
@@ -187,7 +196,6 @@ pokerIo.on("connection", socket => {
 
         player_bet[socket.id] = raise
 
-        console.log(player_bet)
         socket.to(room).emit('post-raise', raise)
 
         if (starting_player != rooms_players_playing[room][0]) {
@@ -311,6 +319,64 @@ pokerIo.on("connection", socket => {
                 }
             }
         }
+    })
+
+    socket.on('submit-hand', (playerHand,assignedRoom) => {
+        rooms_players_hand.push({"room": assignedRoom, "id": socket.id, "hand": playerHand})
+        socket.emit('done-submiting-hands')
+    })
+
+    socket.on('find-winner', room =>{
+
+        const playerHands = {
+            "Royal_Flush": 10,
+            "Straight_Flush": 9,
+            "Four_of_a_Kind": 8,
+            "Full_House": 7,
+            "Flush": 6,
+            "Straight": 5,
+            "Three_of_a_Kind": 4,
+            "Two_Pair": 3,
+            "One_Pair": 2,
+            "High_Card": 1
+        }
+
+        const hands = Object.keys(playerHands)
+
+        var players_highest_hand = {}
+
+        const current_hands = rooms_players_hand.filter(function (element) {
+            return element.room == room
+        })
+        
+        for (let i = 0; i < current_hands.length; i++) {
+            const playerHand = current_hands[i];
+            var highestHand = 0
+            hands.forEach(key =>{
+                if(playerHand.hand[key] != 0){
+                    const value = playerHands[key]
+                    if(value > highestHand){
+                        highestHand = value
+                    }
+                }
+            })
+            players_highest_hand[playerHand.id] = highestHand
+        }
+
+        var playerKeys = Object.keys(players_highest_hand)
+
+        var highestscore = 0
+
+        playerKeys.forEach(key => {
+            const score = players_highest_hand[key]
+            if(score > highestscore){
+                highestscore = score
+            }
+        })
+
+        var winner_hand = Object.keys(playerHands).find(key => playerHands[key] === highestscore)
+
+        socket.to(room).emit('winner_hand', winner_hand)
     })
 })
 
