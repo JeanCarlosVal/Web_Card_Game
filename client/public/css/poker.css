@@ -26,6 +26,8 @@
     background-color: black;
     border-radius: 100px;
     visibility: hidden;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
 }
 
 .player2 {
@@ -37,6 +39,8 @@
     background-color: black;
     border-radius: 100px;
     visibility: hidden;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
 }
 
 .player3 {
@@ -49,6 +53,8 @@
     bottom: 15.8rem;
     border-radius: 100px;
     visibility: hidden;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
 }
 
 .player4 {
@@ -61,6 +67,8 @@
     top: 5rem;
     border-radius: 100px;
     visibility: hidden;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
 }
 
 .player5 {
@@ -73,6 +81,8 @@
     bottom: 4rem;
     border-radius: 100px;
     visibility: hidden;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
 }
 
 .player6 {
@@ -85,6 +95,8 @@
     bottom: 31.5rem;
     border-radius: 100px;
     visibility: hidden;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
 }
 
 .userpokertemplate {
@@ -683,4 +695,11 @@ th {
     position: absolute;
     left: 13rem;
     top: 46rem;
+}
+
+/* animations */
+
+@keyframes winner-animation {
+    from {border-color: lightgreen;}
+    to {border-color: yellow;}
 }

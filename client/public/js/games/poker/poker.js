@@ -204,8 +204,9 @@ poker.on('start-new-betting-round', (player, players, card) => {
 
     if (document.getElementById("table-card-5").innerText != "") {
         var handValue = rules.analyzeHand(hand)
-
-        poker.emit('submit-hand', handValue, assignedRoom)
+        if (document.getElementById(assignedId).style.borderColor != "red") {
+            poker.emit('submit-hand', handValue, assignedRoom)
+        }
     } else {
         startin_player = player
         idPlaying = player
@@ -251,7 +252,7 @@ poker.on('post-raise', value => {
 })
 
 poker.on('done-submiting-hands', e => {
-    if(idPlaying == assignedId){
+    if (idPlaying == assignedId) {
         poker.emit('find-winner', assignedRoom)
     }
 })
@@ -259,12 +260,51 @@ poker.on('done-submiting-hands', e => {
 poker.on('winner_hand', winner_hand => {
     var handValue = rules.analyzeHand(hand)
 
-    if(handValue[winner_hand] != 0){
-        document.getElementById(assignedId+"-status").innerText = "Winner!!!"
+    console.log(handValue[winner_hand])
+
+    if (handValue[winner_hand] != 0) {
+        document.getElementById(assignedId + "-status").innerText = "Winner!!!"
+        document.getElementById(assignedId).style.animationName = "winner-animation"
         updatePage(document.getElementById("game"), assignedRoom)
-        
     }
+
+    setTimeout(function () {
+        if (idPlaying == assignedId) {
+            poker.emit('reset-players-and-cards', assignedRoom)
+        }
+    }, 10000)
 })
+
+poker.on('reset', players => {
+    if (idPlaying == assignedId) {
+        players.forEach(player => {
+            document.getElementById(player).style.borderColor = "gray"
+            document.getElementById(player).style.animationName = ""
+            document.getElementById(player + "-status").innerText = "Status"
+        });
+
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById("table-card-" + i).innerText = ""
+            document.getElementById("table-card-" + i).dataset.value = ""
+            document.getElementById("table-card-" + i).style.backgroundImage = 'url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg")'
+        }
+
+        updatePage(document.getElementById("game"), assignedRoom)
+    }
+
+    document.getElementById("user-card-1").innerText = ""
+    document.getElementById("user-card-1").dataset.value = ""
+    document.getElementById("user-card-1").style.backgroundImage = 'url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg")'
+    document.getElementById("user-card-2").innerText = ""
+    document.getElementById("user-card-2").dataset.value = ""
+    document.getElementById("user-card-2").style.backgroundImage = 'url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg")'
+
+    setTimeout(function () {
+        firstThree = true
+        poker.emit('start-again', assignedRoom)
+    }, 5000)
+})
+
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //listeners for dynamic content in page
 document.querySelector('body').addEventListener('click', function (e) {
