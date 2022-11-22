@@ -134,11 +134,11 @@ pokerIo.on("connection", socket => {
 
                 pokerIo.to(room).emit('user-left', socket.id, room)
 
-                var deleted_hands = rooms_players_hand.filter(function (element){
+                var deleted_hands = rooms_players_hand.filter(function (element) {
                     return element.id != socket.id
                 })
 
-                
+
                 rooms_players_hand = deleted_hands
             }
 
@@ -283,7 +283,7 @@ pokerIo.on("connection", socket => {
                 }
             }
             if (raise_check) {
-                
+
                 if (firstThree) {
                     rooms_players_playing[room] = playerRotation(rooms_players_playing[room])
 
@@ -321,12 +321,12 @@ pokerIo.on("connection", socket => {
         }
     })
 
-    socket.on('submit-hand', (playerHand,assignedRoom) => {
-        rooms_players_hand.push({"room": assignedRoom, "id": socket.id, "hand": playerHand})
+    socket.on('submit-hand', (playerHand, assignedRoom) => {
+        rooms_players_hand.push({ "room": assignedRoom, "id": socket.id, "hand": playerHand })
         socket.emit('done-submiting-hands')
     })
 
-    socket.on('find-winner', room =>{
+    socket.on('find-winner', room => {
 
         const playerHands = {
             "Royal_Flush": 10,
@@ -348,14 +348,14 @@ pokerIo.on("connection", socket => {
         const current_hands = rooms_players_hand.filter(function (element) {
             return element.room == room
         })
-        
+
         for (let i = 0; i < current_hands.length; i++) {
             const playerHand = current_hands[i];
             var highestHand = 0
-            hands.forEach(key =>{
-                if(playerHand.hand[key] != 0){
+            hands.forEach(key => {
+                if (playerHand.hand[key] != 0) {
                     const value = playerHands[key]
-                    if(value > highestHand){
+                    if (value > highestHand) {
                         highestHand = value
                     }
                 }
@@ -369,7 +369,7 @@ pokerIo.on("connection", socket => {
 
         playerKeys.forEach(key => {
             const score = players_highest_hand[key]
-            if(score > highestscore){
+            if (score > highestscore) {
                 highestscore = score
             }
         })
@@ -377,6 +377,16 @@ pokerIo.on("connection", socket => {
         var winner_hand = Object.keys(playerHands).find(key => playerHands[key] === highestscore)
 
         socket.to(room).emit('winner_hand', winner_hand)
+    })
+
+    socket.on('reset-players-and-cards', room => {
+        socket.to(room).emit('reset', rooms_players_playing[room])
+    })
+
+    socket.on('start-again', room => {
+        const checkPlayers = Array.from(rooms_players[room])
+        rooms_players_playing[room] = rooms_players[room]
+        socket.to(room).emit('start-game', true, checkPlayers[0], room)
     })
 })
 
