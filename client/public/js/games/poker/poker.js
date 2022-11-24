@@ -160,6 +160,23 @@ poker.on('start-game', (response, playerTurn, room) => {
         updatePage(document.getElementById("game"), room)
 
         if (idPlaying == assignedId) {
+            raise = 50
+            bet = 50
+
+            var chips = parseInt(document.getElementById(assignedId + "-chips").innerText)
+
+            raise = parseInt(document.getElementById("demo").innerText)
+
+            pot += raise
+
+            poker.emit("send-pot", pot, assignedRoom)
+
+            chips -= bet
+
+            document.getElementById(assignedId + "-chips").innerText = chips.toString()
+
+            updatePage(document.getElementById("game"), room)
+
             const card1 = currentDeck.cards.pop()
             hand.push(card1)
             const card2 = currentDeck.cards.pop()
@@ -187,9 +204,14 @@ poker.on('start-round', room => {
     document.getElementById('table-card-3').style.visibility = "visible"
     document.getElementById('table-card-4').style.visibility = "visible"
     document.getElementById('table-card-5').style.visibility = "visible"
-    document.getElementById(idPlaying).style.borderColor = "yellow"
+    document.getElementById(idPlaying + "-status").innerText = "Big Blind: 50"
+    document.getElementById(idPlaying).style.borderColor = "lightgreen"
 
     updatePage(document.getElementById("game"), room)
+
+    if(idPlaying == assignedId){
+        poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
+    }
 
     startin_player = idPlaying
 })
@@ -197,18 +219,23 @@ poker.on('start-round', room => {
 poker.on('player-turn', player => {
 
     idPlaying = player
+
     document.getElementById(idPlaying).style.borderColor = "yellow"
+
     updatePage(document.getElementById("game"), assignedRoom)
 
 })
 
 poker.on('start-new-betting-round', (player, players, card) => {
 
+    bet = 0
+    raise = 0
+
     document.getElementById("pot-value").innerHTML = pot.toString()
 
     if (document.getElementById("table-card-5").innerText != "") {
         var handValue = rules.analyzeHand(hand)
-        if (document.getElementById(assignedId).style.borderColor != "red") {
+        if (document.getElementById(assignedId+"-status").innerText != "Folded") {
             poker.emit('submit-hand', handValue, assignedRoom)
         }
     } else {
@@ -227,6 +254,9 @@ poker.on('start-new-betting-round', (player, players, card) => {
 })
 
 poker.on('first-betting-round', (card1, card2, card3, firstRound, players, player) => {
+
+    bet = 0
+    raise = 0
 
     document.getElementById("pot-value").innerHTML = pot.toString()
 
@@ -267,11 +297,19 @@ poker.on('done-submiting-hands', e => {
 poker.on('winner_hand', winner_hand => {
     var handValue = rules.analyzeHand(hand)
 
-    console.log(handValue[winner_hand])
-
     if (handValue[winner_hand] != 0) {
         document.getElementById(assignedId + "-status").innerText = "Winner!!!"
         document.getElementById(assignedId).style.animationName = "winner-animation"
+
+        var newchips = parseInt(document.getElementById(assignedId + "-chips").innerText)
+        var win_pot = parseInt(document.getElementById("pot-value").innerText)
+
+        // win_pot will be what user won and this can be sned to the database
+        newchips += win_pot
+
+        document.getElementById(assignedId + "-chips").innerText = newchips.toString()
+        document.getElementById("pot-value").innerText = "0"
+
         updatePage(document.getElementById("game"), assignedRoom)
     }
 
@@ -297,6 +335,10 @@ poker.on('reset', players => {
         }
 
         updatePage(document.getElementById("game"), assignedRoom)
+
+        setTimeout(function () {
+            poker.emit('start-again', assignedRoom)
+        }, 5000)
     }
 
     document.getElementById("user-card-1").innerText = ""
@@ -306,10 +348,15 @@ poker.on('reset', players => {
     document.getElementById("user-card-2").dataset.value = ""
     document.getElementById("user-card-2").style.backgroundImage = 'url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg")'
 
-    setTimeout(function () {
-        firstThree = true
-        poker.emit('start-again', assignedRoom)
-    }, 5000)
+    firstThree = true
+})
+
+poker.on('update-pot', update => {
+    pot = update
+})
+
+poker.on('change-starting-player', player =>{
+    startin_player = player
 })
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -324,6 +371,7 @@ document.querySelector('body').addEventListener('click', function (e) {
 
                 updatePage(document.getElementById("game"), assignedRoom)
 
+
                 poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
             } else {
                 document.getElementById(assignedId + "-status").innerText = "Call"
@@ -335,7 +383,7 @@ document.querySelector('body').addEventListener('click', function (e) {
 
                 pot += bet
 
-                poker.emit("send-pot", pot)
+                poker.emit("send-pot", pot, assignedRoom)
 
                 chips -= bet
 
@@ -343,6 +391,7 @@ document.querySelector('body').addEventListener('click', function (e) {
 
                 updatePage(document.getElementById("game"), assignedRoom)
 
+                console.log(firstThree)
                 poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
 
             }
@@ -354,6 +403,7 @@ document.querySelector('body').addEventListener('click', function (e) {
 
             updatePage(document.getElementById("game"), assignedRoom)
 
+            console.log(firstThree)
             poker.emit('player-folded', assignedRoom, assignedId, startin_player, firstThree, raise)
         }
 
@@ -368,7 +418,7 @@ document.querySelector('body').addEventListener('click', function (e) {
 
             pot += raise
 
-            poker.emit("send-pot", pot)
+            poker.emit("send-pot", pot, assignedRoom)
 
             bet = raise
 
@@ -378,6 +428,7 @@ document.querySelector('body').addEventListener('click', function (e) {
 
             updatePage(document.getElementById("game"), assignedRoom)
 
+            console.log(firstThree)
             poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
         }
     }

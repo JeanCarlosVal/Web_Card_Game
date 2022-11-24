@@ -37,8 +37,6 @@ function analyzeHand(hand) {
         "High_Card": High_Card(hand)
     }
 
-    console.log(playerHand)
-
     return playerHand
 
 }

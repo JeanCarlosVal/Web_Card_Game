@@ -206,6 +206,7 @@ pokerIo.on("connection", socket => {
             if (raise_check == false) {
                 for (let i = 0; i < rooms_players_playing[room].length; i++) {
                     const element = rooms_players_playing[room][i];
+
                     if (player_bet[element] != raise) {
                         raise_check = false
                         socket.to(room).emit('player-turn', rooms_players_playing[room][0])
@@ -232,6 +233,7 @@ pokerIo.on("connection", socket => {
                     if (raise_check == false) {
                         for (let i = 0; i < rooms_players_playing[room].length; i++) {
                             const element = rooms_players_playing[room][i];
+                            
                             if (player_bet[element] != raise) {
                                 raise_check = false
                                 socket.to(room).emit('player-turn', rooms_players_playing[room][0])
@@ -266,6 +268,9 @@ pokerIo.on("connection", socket => {
         socket.to(room).emit('post-raise', raise)
 
         if (starting_player != rooms_players_playing[room][0]) {
+            if(starting_player == socket.id){
+                socket.to(room).emit('change-starting-player', rooms_players_playing[room][0] )
+            }
             socket.to(room).emit('player-turn', rooms_players_playing[room][0])
         } else {
             var raise_check = false
@@ -273,6 +278,7 @@ pokerIo.on("connection", socket => {
             if (raise_check == false) {
                 for (let i = 0; i < rooms_players_playing[room].length; i++) {
                     const element = rooms_players_playing[room][i];
+
                     if (player_bet[element] != raise) {
                         raise_check = false
                         socket.to(room).emit('player-turn', rooms_players_playing[room][0])
@@ -299,6 +305,7 @@ pokerIo.on("connection", socket => {
                     if (raise_check == false) {
                         for (let i = 0; i < rooms_players_playing[room].length; i++) {
                             const element = rooms_players_playing[room][i];
+
                             if (player_bet[element] != raise) {
                                 raise_check = false
                                 socket.to(room).emit('player-turn', rooms_players_playing[room][0])
@@ -327,6 +334,7 @@ pokerIo.on("connection", socket => {
     })
 
     socket.on('find-winner', room => {
+        console.log(rooms_players_hand)
 
         const playerHands = {
             "Royal_Flush": 10,
@@ -380,7 +388,7 @@ pokerIo.on("connection", socket => {
     })
 
     socket.on('reset-players-and-cards', room => {
-        socket.to(room).emit('reset', rooms_players_playing[room])
+        socket.to(room).emit('reset', rooms_players[room])
     })
 
     socket.on('start-again', room => {
@@ -389,8 +397,9 @@ pokerIo.on("connection", socket => {
         socket.to(room).emit('start-game', true, checkPlayers[0], room)
     })
 
-    socket.on('send-pot', pot => {
-        
+    socket.on('send-pot', (pot, room) => {
+
+        socket.to(room).emit('update-pot', pot)
     })
 })
 
