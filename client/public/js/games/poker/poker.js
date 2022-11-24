@@ -35,6 +35,8 @@ let firstThree = true
 
 let hand = []
 
+let pot = 0
+
 var poker = io("http://localhost:8080/poker")
 
 var createRoom = document.getElementById("createRoom")
@@ -202,6 +204,8 @@ poker.on('player-turn', player => {
 
 poker.on('start-new-betting-round', (player, players, card) => {
 
+    document.getElementById("pot-value").innerHTML = pot.toString()
+
     if (document.getElementById("table-card-5").innerText != "") {
         var handValue = rules.analyzeHand(hand)
         if (document.getElementById(assignedId).style.borderColor != "red") {
@@ -223,6 +227,9 @@ poker.on('start-new-betting-round', (player, players, card) => {
 })
 
 poker.on('first-betting-round', (card1, card2, card3, firstRound, players, player) => {
+
+    document.getElementById("pot-value").innerHTML = pot.toString()
+
     firstThree = firstRound
     startin_player = player
     idPlaying = player
@@ -326,6 +333,10 @@ document.querySelector('body').addEventListener('click', function (e) {
 
                 bet = (raise - bet)
 
+                pot += bet
+
+                poker.emit("send-pot", pot)
+
                 chips -= bet
 
                 document.getElementById(assignedId + "-chips").innerText = chips.toString()
@@ -354,6 +365,10 @@ document.querySelector('body').addEventListener('click', function (e) {
             var chips = parseInt(document.getElementById(assignedId + "-chips").innerText)
 
             raise = parseInt(document.getElementById("demo").innerText)
+
+            pot += raise
+
+            poker.emit("send-pot", pot)
 
             bet = raise
 

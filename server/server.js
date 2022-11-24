@@ -388,6 +388,10 @@ pokerIo.on("connection", socket => {
         rooms_players_playing[room] = rooms_players[room]
         socket.to(room).emit('start-game', true, checkPlayers[0], room)
     })
+
+    socket.on('send-pot', pot => {
+        
+    })
 })
 
 const slap = io.of('/slap'); // namespace
