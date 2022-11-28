@@ -24,6 +24,7 @@
 </div>
 <div id="game-status">
     <div id="game" class="game">
+        <div id="pot" class="pot">Pot<p id="pot-value">0</p></div>
         <div id="game-message" class="message">hello</div>
         <div class="table">
             <div id="player" class="player1">
@@ -77,11 +78,11 @@
     <div id="user-card-2" class="user-card-2" data-value=""></div>
     <div class="user-options">
         <button class="fold-button" role="button" id="fold"> FOLD </button>
-        <button class="check-button" role="button" id="check"> CHECK </button>
+        <button class="check-button" role="button" id="check"> CHECK/CALL </button>
         <button class="raise-button" role="button" id="raise"> RAISE BET </button>
         <div class="slidecontainer">
             <input type="range" min="50" max="1000" value="50" class="slider" id="myRange">
-            <p>Chips: <span id="demo"></span></p>
+            <p>Chips: <span id="demo">50</span></p>
         </div>
     </div>
 </div>

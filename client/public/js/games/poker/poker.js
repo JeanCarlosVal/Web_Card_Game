@@ -5,11 +5,37 @@ window.onload = function () {
     document.getElementById("rooms").click();
 }
 
+// let testHand = [
+//     {"suit": "♦", "value": "A"},
+//     {"suit": "♣", "value": "5"},
+//     {"suit": "♦", "value": "K"},
+//     {"suit": "♣", "value": "4"},
+//     {"suit": "♦", "value": "Q"},
+//     {"suit": "♦", "value": "J"},
+//     {"suit": "♦", "value": "10"},
+// ]
+
+// rules.analyzeHand(testHand)
+
 var assignedId
 
 var idPlaying
 
 let currentDeck = []
+
+let raise = 0
+
+let bet = 0
+
+var startin_player
+
+var assignedRoom
+
+let firstThree = true
+
+let hand = []
+
+let pot = 0
 
 var poker = io("http://localhost:8080/poker")
 
@@ -26,7 +52,8 @@ seerooms.addEventListener("click", e => {
     poker.emit("see-rooms")
     document.getElementById("rooms-table-body").innerHTML = ""
 })
-
+//-----------------------------------------------------------------------------------------------------
+//server listeners
 poker.on("assign-id", id => {
     assignedId = id
 })
@@ -76,6 +103,7 @@ poker.on('is-room-available', (availability, room, size) => {
 
 poker.on("create-status", (response, onlineId, room) => {
     if (response) {
+        assignedRoom = room
         document.getElementById("createRoomDisplay").style.display = "none"
         document.getElementById("rooms-table").style.display = "none"
         document.getElementById("game").style.display = "block"
@@ -96,6 +124,7 @@ function join_game_lobby(roomName) {
 
 poker.on('joined-progress-game-status', (response, onlineId, data, room) => {
     if (response) {
+        assignedRoom = room
         document.getElementById("createRoomDisplay").style.display = "none"
         document.getElementById("rooms-table").style.display = "none"
         document.getElementById("playerOptions").style.display = "block"
@@ -131,10 +160,27 @@ poker.on('start-game', (response, playerTurn, room) => {
         updatePage(document.getElementById("game"), room)
 
         if (idPlaying == assignedId) {
+            raise = 50
+            bet = 50
+
+            var chips = parseInt(document.getElementById(assignedId + "-chips").innerText)
+
+            raise = parseInt(document.getElementById("demo").innerText)
+
+            pot += raise
+
+            poker.emit("send-pot", pot, assignedRoom)
+
+            chips -= bet
+
+            document.getElementById(assignedId + "-chips").innerText = chips.toString()
+
+            updatePage(document.getElementById("game"), room)
+
             const card1 = currentDeck.cards.pop()
-            console.log(currentDeck.cards)
+            hand.push(card1)
             const card2 = currentDeck.cards.pop()
-            console.log(currentDeck.cards)
+            hand.push(card2)
 
             renderHand(card1, card2)
             poker.emit('store-deck', currentDeck.cards, room)
@@ -144,8 +190,10 @@ poker.on('start-game', (response, playerTurn, room) => {
 })
 
 poker.on('new-hand', (card1, card2, room, player) => {
-    if(player == assignedId){
-        renderHand(card1,card2)
+    if (player == assignedId) {
+        renderHand(card1, card2)
+        hand.push(card1)
+        hand.push(card2)
         poker.emit('give-cards-to-players', idPlaying, room)
     }
 })
@@ -156,17 +204,232 @@ poker.on('start-round', room => {
     document.getElementById('table-card-3').style.visibility = "visible"
     document.getElementById('table-card-4').style.visibility = "visible"
     document.getElementById('table-card-5').style.visibility = "visible"
-    document.getElementById(idPlaying).style.borderColor = "yellow"
+    document.getElementById(idPlaying + "-status").innerText = "Big Blind: 50"
+    document.getElementById(idPlaying).style.borderColor = "lightgreen"
 
     updatePage(document.getElementById("game"), room)
+
+    if(idPlaying == assignedId){
+        poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
+    }
+
+    startin_player = idPlaying
 })
 
+poker.on('player-turn', player => {
+
+    idPlaying = player
+
+    document.getElementById(idPlaying).style.borderColor = "yellow"
+
+    updatePage(document.getElementById("game"), assignedRoom)
+
+})
+
+poker.on('start-new-betting-round', (player, players, card) => {
+
+    bet = 0
+    raise = 0
+
+    document.getElementById("pot-value").innerHTML = pot.toString()
+
+    if (document.getElementById("table-card-5").innerText != "") {
+        var handValue = rules.analyzeHand(hand)
+        if (document.getElementById(assignedId+"-status").innerText != "Folded") {
+            poker.emit('submit-hand', handValue, assignedRoom)
+        }
+    } else {
+        startin_player = player
+        idPlaying = player
+
+        if (idPlaying == assignedId) {
+            clearRound(players, card)
+        }
+        hand.push(card)
+
+        document.getElementById(idPlaying).style.borderColor = "yellow"
+
+        updatePage(document.getElementById("game"), assignedRoom)
+    }
+})
+
+poker.on('first-betting-round', (card1, card2, card3, firstRound, players, player) => {
+
+    bet = 0
+    raise = 0
+
+    document.getElementById("pot-value").innerHTML = pot.toString()
+
+    firstThree = firstRound
+    startin_player = player
+    idPlaying = player
+
+    players.forEach(element => {
+        document.getElementById(element + "-status").innerText = "Status"
+        document.getElementById(element).style.borderColor = "gray"
+    });
+
+    if (idPlaying == assignedId) {
+        render_firstThree_Cards(card1)
+        render_firstThree_Cards(card2)
+        render_firstThree_Cards(card3)
+    }
+
+    hand.push(card1)
+    hand.push(card2)
+    hand.push(card3)
+
+    document.getElementById(idPlaying).style.borderColor = "yellow"
+
+    updatePage(document.getElementById("game"), assignedRoom)
+})
+
+poker.on('post-raise', value => {
+    raise = value
+})
+
+poker.on('done-submiting-hands', e => {
+    if (idPlaying == assignedId) {
+        poker.emit('find-winner', assignedRoom)
+    }
+})
+
+poker.on('winner_hand', winner_hand => {
+    var handValue = rules.analyzeHand(hand)
+
+    if (handValue[winner_hand] != 0) {
+        document.getElementById(assignedId + "-status").innerText = "Winner!!!"
+        document.getElementById(assignedId).style.animationName = "winner-animation"
+
+        var newchips = parseInt(document.getElementById(assignedId + "-chips").innerText)
+        var win_pot = parseInt(document.getElementById("pot-value").innerText)
+
+        // win_pot will be what user won and this can be sned to the database
+        newchips += win_pot
+
+        document.getElementById(assignedId + "-chips").innerText = newchips.toString()
+        document.getElementById("pot-value").innerText = "0"
+
+        updatePage(document.getElementById("game"), assignedRoom)
+    }
+
+    setTimeout(function () {
+        if (idPlaying == assignedId) {
+            poker.emit('reset-players-and-cards', assignedRoom)
+        }
+    }, 10000)
+})
+
+poker.on('reset', players => {
+    if (idPlaying == assignedId) {
+        players.forEach(player => {
+            document.getElementById(player).style.borderColor = "gray"
+            document.getElementById(player).style.animationName = ""
+            document.getElementById(player + "-status").innerText = "Status"
+        });
+
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById("table-card-" + i).innerText = ""
+            document.getElementById("table-card-" + i).dataset.value = ""
+            document.getElementById("table-card-" + i).style.backgroundImage = 'url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg")'
+        }
+
+        updatePage(document.getElementById("game"), assignedRoom)
+
+        setTimeout(function () {
+            poker.emit('start-again', assignedRoom)
+        }, 5000)
+    }
+
+    document.getElementById("user-card-1").innerText = ""
+    document.getElementById("user-card-1").dataset.value = ""
+    document.getElementById("user-card-1").style.backgroundImage = 'url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg")'
+    document.getElementById("user-card-2").innerText = ""
+    document.getElementById("user-card-2").dataset.value = ""
+    document.getElementById("user-card-2").style.backgroundImage = 'url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/5493/playing-card-back.jpg")'
+
+    firstThree = true
+})
+
+poker.on('update-pot', update => {
+    pot = update
+})
+
+poker.on('change-starting-player', player =>{
+    startin_player = player
+})
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //listeners for dynamic content in page
 document.querySelector('body').addEventListener('click', function (e) {
     //only if its the turn of the player enable actions
     if (idPlaying == assignedId) {
         if (e.target.id == 'check') {
-            console.log("checked")
+            if (raise == 0) {
+                document.getElementById(assignedId + "-status").innerText = "Checked"
+                document.getElementById(idPlaying).style.borderColor = "lightgreen"
+
+                updatePage(document.getElementById("game"), assignedRoom)
+
+
+                poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
+            } else {
+                document.getElementById(assignedId + "-status").innerText = "Call"
+                document.getElementById(idPlaying).style.borderColor = "lightgreen"
+
+                var chips = parseInt(document.getElementById(assignedId + "-chips").innerText)
+
+                bet = (raise - bet)
+
+                pot += bet
+
+                poker.emit("send-pot", pot, assignedRoom)
+
+                chips -= bet
+
+                document.getElementById(assignedId + "-chips").innerText = chips.toString()
+
+                updatePage(document.getElementById("game"), assignedRoom)
+
+                console.log(firstThree)
+                poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
+
+            }
+        }
+
+        if (e.target.id == 'fold') {
+            document.getElementById(assignedId + "-status").innerText = "Folded"
+            document.getElementById(idPlaying).style.borderColor = "red"
+
+            updatePage(document.getElementById("game"), assignedRoom)
+
+            console.log(firstThree)
+            poker.emit('player-folded', assignedRoom, assignedId, startin_player, firstThree, raise)
+        }
+
+        if (e.target.id == 'raise') {
+
+            document.getElementById(assignedId + "-status").innerHTML = "Raised by " + document.getElementById("demo").innerText
+            document.getElementById(idPlaying).style.borderColor = "lightgreen"
+
+            var chips = parseInt(document.getElementById(assignedId + "-chips").innerText)
+
+            raise = parseInt(document.getElementById("demo").innerText)
+
+            pot += raise
+
+            poker.emit("send-pot", pot, assignedRoom)
+
+            bet = raise
+
+            chips -= bet
+
+            document.getElementById(assignedId + "-chips").innerText = chips.toString()
+
+            updatePage(document.getElementById("game"), assignedRoom)
+
+            console.log(firstThree)
+            poker.emit('next-player', assignedRoom, startin_player, firstThree, raise)
         }
     }
 
@@ -183,7 +446,8 @@ document.querySelector('body').addEventListener('mousedown', function (e) {
     }
 
 })
-
+//-------------------------------------------------------------------------------------------------------------------------------
+//functions to render and update the client
 function updatePage(gamePage, room) {
     var html = gamePage.outerHTML
 
@@ -203,7 +467,7 @@ function renderHand(card1, card2) {
 
     const userCard1 = document.getElementById("user-card-1")
     const userCard2 = document.getElementById("user-card-2")
-    
+
     var userCard1Color
     var userCard2Color
 
@@ -228,4 +492,62 @@ function renderHand(card1, card2) {
     userCard2.innerText = card2.suit
     userCard2.classList.add(userCard2Color)
     userCard2.dataset.value = `${card2.value} ${card2.suit}`
+}
+
+function clearRound(players, card) {
+    players.forEach(element => {
+        document.getElementById(element + "-status").innerText = "Status"
+        document.getElementById(element).style.borderColor = "gray"
+    });
+
+    var cardColor
+
+    if (card.suit === "♣" || card.suit === "♠") {
+        cardColor = "black"
+    } else {
+        cardColor = "red"
+    }
+
+    for (let i = 4; i <= 5; i++) {
+        if (document.getElementById("table-card-" + i).innerText == "") {
+            document.getElementById("table-card-" + i).style.backgroundImage = "none"
+            document.getElementById("table-card-" + i).innerText = card.suit
+            document.getElementById("table-card-" + i).classList.add(cardColor)
+            document.getElementById("table-card-" + i).dataset.value = `${card.value} ${card.suit}`
+            document.getElementById("table-card-" + i).style.bottom = "2rem"
+            break
+        }
+    }
+
+    if (document.getElementById("table-card-5").innerText != "") {
+        document.getElementById("table-card-1").style.bottom = ""
+        document.getElementById("table-card-2").style.bottom = ""
+        document.getElementById("table-card-3").style.bottom = ""
+        document.getElementById("table-card-4").style.bottom = ""
+        document.getElementById("table-card-5").style.bottom = ""
+
+
+    }
+}
+
+function render_firstThree_Cards(card) {
+
+    var cardColor
+
+    if (card.suit === "♣" || card.suit === "♠") {
+        cardColor = "black"
+    } else {
+        cardColor = "red"
+    }
+
+    for (let i = 1; i <= 3; i++) {
+        if (document.getElementById("table-card-" + i).innerText == "") {
+            document.getElementById("table-card-" + i).style.backgroundImage = "none"
+            document.getElementById("table-card-" + i).innerText = card.suit
+            document.getElementById("table-card-" + i).classList.add(cardColor)
+            document.getElementById("table-card-" + i).dataset.value = `${card.value} ${card.suit}`
+            document.getElementById("table-card-" + i).style.bottom = "2rem"
+            break
+        }
+    }
 }
