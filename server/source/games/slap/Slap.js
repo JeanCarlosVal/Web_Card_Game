@@ -64,9 +64,8 @@ module.exports = class Slap {
         console.log('action = put');
         console.log('HAND ' + this.currentPlayer.hand.size());
         var card = this.currentPlayer.hand.draw();
-        console.log('card: ' + card.toString());
+        console.log('card: ' + card);
         this.deck.put(card);
-
 
         // break the lock
         if (this.lockValue(card)) {
