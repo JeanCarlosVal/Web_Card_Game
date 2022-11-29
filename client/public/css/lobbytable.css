@@ -3,14 +3,14 @@
 }
 
 #pre-lobby {
-    background-color:purple;
+    background-color:white;
 }
 #in-lobby {
-    background-color: palevioletred;
+    background-color: white;
     display:none;
 }
 #prep {
-    background-color:peru;
+    background-color:white;
     display:none;
 }
 
