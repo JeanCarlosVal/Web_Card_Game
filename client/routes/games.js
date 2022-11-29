@@ -18,6 +18,12 @@ router.get('/poker', (req,res) => {
 router.get('/slap', (req,res) => {
     res.render('games/slap')
 })
+router.get('/war', (req, res) => {
+    res.render('games/war');
+})
+router.get('/blackjack', (req, res) => {
+    res.render('games/blackjack');
+})
 
 router.get('/crazy8', (req, res) => {
     res.render('games/crazy8')
