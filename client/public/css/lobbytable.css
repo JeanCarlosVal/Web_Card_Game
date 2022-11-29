@@ -3,14 +3,14 @@
 }
 
 #pre-lobby {
-    background-color:white;
+    background-color:green;
 }
 #in-lobby {
-    background-color: white;
+    background-color: tomato;
     display:none;
 }
 #prep {
-    background-color:white;
+    background-color:khaki;
     display:none;
 }
 

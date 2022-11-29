@@ -498,19 +498,17 @@ slap.on('connection', (socket) => {
         }
         console.log(socket.id + " put down a card.")
 
-        var lobby = slaplm.getLobby(pkg.lobbyid);
-        lobby.put(socket.id);
-        var cardPut = lobby.deck.getTop(0);
-
         console.log("current player" + lobby.currentPlayer.socketid);
         var cardPut = lobby.put(socket.id);
+        console.log("current player" + lobby.currentPlayer.socketid);
+
         var cardPutRank;
         var cardPutSuite;
         if (cardPut) {
             cardPutRank = cardPut.rank;
             cardPutSuite = cardPut.suite;
         }
-        console.log("current player" + lobby.currentPlayer.socketid);
+
         if (lobby.isPostLock) {
             setTimeout(() => {
                 lobby.isPostLock = false;

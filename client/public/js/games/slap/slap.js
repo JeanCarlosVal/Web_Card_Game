@@ -138,7 +138,7 @@ socket.on('game-start', (pkg) => {
 });
 
 socket.on('your-turn', pkg => {
-    isLock = pkg.isLock;
+    // isLock = pkg.isLock;
     isTurn = true;
 });
 
