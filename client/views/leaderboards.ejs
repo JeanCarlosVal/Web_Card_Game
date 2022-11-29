@@ -1,17 +1,50 @@
-<div class="leaderboard">
-    <table>
-        <tr><h3>Poker Wins Leaders</h3></tr>
-        <% for (var i = 0; i < pokerLeaders.length; i++) { %>
-            <tr> <td><%= pokerLeaders[i].username %></td> <td><%= pokerLeaders[i].poker.wins %> <td></tr>
-        <% } %>
+<center>
 </table>
+</div>
+</center>
+<div class="area" >
+    <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+    </ul>
+</div >
+<div class="centered" style="overflow:scroll;">
+    <center><H1>Leader Board</H1></center>
+
+    <center><table class="leaderboard">
+        <tr class="tableStyle">
+            <th class="tableStyle">Username</th>
+            <th class="tableStyle"># of Wins</th>
+        </tr>
+
+        <tr class="tableStyle"><h3>HiLo Leaders</h3></tr>
+        <% for (var i = 0; i < hiloLeaders.length; i++) { %>
+            <tr class="tableStyle"> 
+                <td class="tableStyle"><%= hiloLeaders[i].username %></td> 
+                <td class="tableStyle"><%= hiloLeaders[i].hi_lo.wins %> <td>
+
+            </tr>
+        <% } %>
+        </table>
+        <br />
+        <table class="leaderboard">
+        <tr class="tableStyle"><h3>Poker Leaders</h3></tr>
+        <% for (var i = 0; i < pokerLeaders.length; i++) { %>
+            <tr class="tableStyle"> 
+                <td class="tableStyle"><%= pokerLeaders[i].username %></td> 
+                <td class="tableStyle"><%= pokerLeaders[i].poker.wins %> <td>
+
+            </tr>
+        <% } %>
+   
+</table></center>
 </div>
 
-<div class="leaderboard">
-    <table>
-        <tr><h3>HiLo Wins Leaders</h3></tr>
-        <% for (var i = 0; i < hiloLeaders.length; i++) { %>
-            <tr> <td><%= hiloLeaders[i].username %></td> <td><%= hiloLeaders[i].hi_lo.wins %> <td></tr>
-        <% } %>
-</table>
-</div>

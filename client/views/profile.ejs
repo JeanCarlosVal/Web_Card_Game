@@ -3,7 +3,7 @@
   <%}%>
 
 <form action="/logout" method="post">
-    <button id="logout-btn" type="submit" style="position: absolute; top: 0px; right: 0px;">Logout</button> 
+    <button id="logout-btn" type="submit" style="position: absolute; top: 90px; right: 0px;">Logout</button> 
 </form>
 <center><h1> <%= user.username %></h1></center>
 
@@ -11,22 +11,20 @@
 <div id="profile-container">
    <image id="profileImage" src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" />
 </div>
-<input id="imageUpload" type="file" 
-       name="profile_photo" placeholder="Photo" required="" capture>
-      </style>
+<input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" required="" capture>
       <script>
       $("#profileImage").click(function(e) {
           $("#imageUpload").click();
       });
       function fasterPreview( uploader ) {
           if ( uploader.files && uploader.files[0] ){
-                $('#profileImage').attr('src', 
-                   window.URL.createObjectURL(uploader.files[0]) );
+                $('#profileImage').attr('src', window.URL.createObjectURL(uploader.files[0]) );
           }
       }
       $("#imageUpload").change(function(){
           fasterPreview( this );
       });
+
       </script>
 
 
@@ -48,9 +46,7 @@
     <tr>
         <td> <center>Name: <%= user.first_name + ' ' + user.last_name %></center></td>
     </tr>
-    <!--<tr>
-        <td> date of birth: <%= user.date_of_birth %> </td>
-    </tr> -->
+
     <tr>
         <td><center> Wins: <%= user.wins %> </center></td>
     </tr>
@@ -74,9 +70,7 @@
   <div class="modal-content">
     <center>Enter Account Credentials To Delete Account</center>
     <form action="/delete_profile" method="POST">
-        <!--<label for="username">Username</label>-->
             <input id = "style" type="text" name="username" placeholder="Username">
-        <!--<label for="password">Password</label>-->
             <input id = "style" type="password" name="password" placeholder="Password">
             <br>
         <button class="arial-font shadow cool-button success-button" type="submit">Delete Account</button>
@@ -90,11 +84,8 @@
   <!-- Modal content -->
   <div class="modal-content">
     <form action="/edit_account" method="POST">
-        <!--<label for="username">Username</label>-->
             <input id = "style" type="text" name="username" placeholder="Username">
-        <!--<label for="password">New Password</label>-->
             <input id = "style" type="password" name="password" placeholder="Password">
-        <!--<label for="password-confirm">Confirm New Password</label>-->
             <input id = "style" type="password" name="password_confirm" placeholder="Confirm Password">
             <br>
         <button class="arial-font shadow cool-button success-button" type="submit">Edit Account</button>
@@ -102,7 +93,7 @@
     <button class="arial-font shadow cool-button success-button" id="go-back" class="profile-btn" onclick="hide(edit_modal)">Go Back</button>
   </div>
 </div>
-
+<center><button class="arial-font shadow cool-button success-button"><a href="/games">Back to Games!</a></button></center>
 <script>
   
   var delete_modal = document.getElementById("delete-modal");
