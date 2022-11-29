@@ -20,5 +20,8 @@ router.get('/slap', (req,res) => {
 router.get('/war', (req, res) => {
     res.render('games/war');
 })
+router.get('/blackjack', (req, res) => {
+    res.render('games/blackjack');
+})
 
 module.exports = router;
