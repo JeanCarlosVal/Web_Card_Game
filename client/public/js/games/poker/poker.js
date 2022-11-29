@@ -306,6 +306,7 @@ poker.on('winner_hand', winner_hand => {
 
         // win_pot will be what user won and this can be sned to the database
         newchips += win_pot
+        updateWinnings();
 
         document.getElementById(assignedId + "-chips").innerText = newchips.toString()
         document.getElementById("pot-value").innerText = "0"
@@ -550,4 +551,11 @@ function render_firstThree_Cards(card) {
             break
         }
     }
+}
+
+//function to update user winnings
+function updateWinnings() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('post','/poker_results');
+       xhr.send({'winnings': win_pot, 'sessionID': sessionID});
 }
