@@ -1,20 +1,20 @@
 #content {
-    background-color:crimson;
+    background-color:white;
     display:table;
     width:100%;
     height:100%;
 }
 #game {
     display:none;
-    background-color: aquamarine;
+    background-color: white;
     width:100%;
     height:100%;
 }
 #play-area {
-    background-color:plum;
+    background-color:white;
 }
 #play-table {
-    background-color: brown;
+    background-color: white;
     width:500px;
     height:500px;
     border-radius:75%;
@@ -33,3 +33,6 @@
     border:2px double black;
     border-radius:10%;
 }
+ #roomName{
+    text-align: center;
+ }

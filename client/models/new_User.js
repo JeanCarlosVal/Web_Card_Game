@@ -45,10 +45,10 @@ const newUserSchema = new mongoose.Schema({
     },
 
     poker: {
-        wins: Number,
-        required: false,
-        losses: Number,
-        required: false
+        winnings: {
+            type: Number,
+            required: false
+        }
     },
     
     sessionID: {

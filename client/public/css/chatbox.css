@@ -1,6 +1,6 @@
 #chatbox {
     display:table-cell;
-    background-color:rebeccapurple;
+    background-color:coral;
     border:2pxx solid black;
     width:0;
     /* Open/Close */
@@ -15,7 +15,17 @@
     width:20%;
 }
 #chatbox-open-close {
-    background-color: coral;
+    border-radius: 15px;
+    color: white;
+    background-color: #1abc9c;
+    padding: 15px 32px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: 0px;
+    text-align: center;
     position:absolute;
     height:50px;
     width:75px;
@@ -23,22 +33,22 @@
     top:85px;
 }
 #feed {
-    background-color:goldenrod;
+    background-color:coral;
     margin-top:3.75rem;
     margin-bottom:3.75rem;
     height:86%;
 }
 .message {
-    background-color:orange;
+    background-color:white;
     list-style:none;
 }
 #form {
-    background-color:grey;
+    background-color:coral;
     height:10%;
 }
 #text {
     background-color:white;
 }
 #send {
-    background-color:red;
+    background-color:gray;
 }
