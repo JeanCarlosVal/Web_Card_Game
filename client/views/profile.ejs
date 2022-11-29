@@ -1,41 +1,42 @@
 <% if (locals.errorMessage != null) { %>
   <%= errorMessage %>
   <%}%>
+</br>
+</br>
+</br>
+</br>
 
-<form action="/logout" method="post">
-    <button id="logout-btn" type="submit" style="position: absolute; top: 90px; right: 0px;">Logout</button> 
-</form>
-<center><h1> <%= user.username %></h1></center>
+<center><img id="imgPreview" src="" alt="Preview"></center>
+</br>
+<div id="uploadButton">
+<input class="ProfilePic" type="file" id="myFileInput">
+</div>
+<script>
+  document.querySelector('#myFileInput').addEventListener("change", function(){
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => {
+      localStorage.setItem("recent-image", reader.result)    
+    });
+
+    reader.readAsDataURL(this.files[0]);
+  });
+
+  document.addEventListener("DOMContentLoaded", () =>{
+    const recentImageDataUrl = localStorage.getItem("recent-image");
+
+    if (recentImageDataUrl) {
+      document.querySelector("#imgPreview").setAttribute("src", recentImageDataUrl);
+    }
+  });
+
+</script>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<div id="profile-container">
-   <image id="profileImage" src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" />
-</div>
-<input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" required="" capture>
-      <script>
-      $("#profileImage").click(function(e) {
-          $("#imageUpload").click();
-      });
-      function fasterPreview( uploader ) {
-          if ( uploader.files && uploader.files[0] ){
-                $('#profileImage').attr('src', window.URL.createObjectURL(uploader.files[0]) );
-          }
-      }
-      $("#imageUpload").change(function(){
-          fasterPreview( this );
-      });
-
-      </script>
-
 
 
 </div>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
 </br>
 </br>
 </br>

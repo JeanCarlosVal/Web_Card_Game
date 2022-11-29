@@ -454,3 +454,17 @@ border-radius: 50%;
 }
 
 } 
+
+#imgPreview{
+    width: 10%;
+    height: 15%;
+    border-radius: 50%;
+}
+
+.ProfilePic {
+    color: white;
+    position: absolute;
+    right: 520px;
+}
+
+  

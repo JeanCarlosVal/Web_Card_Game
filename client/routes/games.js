@@ -23,4 +23,5 @@ router.get('/crazy8', (req, res) => {
     res.render('games/crazy8')
 })
 
+
 module.exports = router
