@@ -70,8 +70,7 @@ router.post('/sign_up', async (req,res) => {
             losses: 0
         },
         poker: {
-            wins: 0,
-            losses: 0
+           winnings: 0
         }
         });
 
@@ -193,6 +192,7 @@ router.post('/logout', (req, res) => {
     }
     res.redirect('/');
 })
+
 router.post('/game_results', async (req, res) => {
     var win = 0;
     var loss = 0;
@@ -203,6 +203,30 @@ router.post('/game_results', async (req, res) => {
     res.send('hi');
 
 })
+
+router.post('/poker_results', async(req, res) => {
+let results = req.body;
+let winnings = results.winnings;
+let pokerWinningsField = "poker.winnings";
+const opts = {new: true};
+var updatedAccount = await User.findOneAndUpdate (
+    {
+        //find profile with sessionID
+        "sessionID": results.sessionID
+    },
+
+    {
+        //increase winnings
+        $inc: {
+            games_played: 1,
+            [pokerWinningsField]: winnings
+        }
+    },
+    opts
+)
+console.log(updatedAccount);
+res.redirect('/profile');
+});
 
 //endpoint to update user game stats when games end 
 router.post('/game_results', async (req, res) => {
@@ -217,6 +241,7 @@ router.post('/game_results', async (req, res) => {
     console.log(game_result);
 
       const opts = {new: true};
+
           var updatedAccount = await User.findOneAndUpdate (
           {
               //find user's profile using sessionID
@@ -242,7 +267,7 @@ router.post('/game_results', async (req, res) => {
 });
 
 router.get('/leaderboards', async (req, res) => {
-    let pokerLeaders = await User.find().sort({"poker.wins" : -1}).limit(5);
+    let pokerLeaders = await User.find().sort({"poker.winnings" : -1}).limit(5);
     console.log(pokerLeaders);
     let hiloLeaders = await User.find().sort({"hi_lo.wins" : -1}).limit(5);
     console.log(hiloLeaders);
