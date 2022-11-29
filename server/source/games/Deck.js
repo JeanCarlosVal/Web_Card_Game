@@ -6,8 +6,10 @@ module.exports = class Deck {
         this.type = type;
         if (type === 'hand') {
             this.type = 'hand';
+            this.total = 0;
         }
         else if (type === 'standard52') {
+            this.type = 'standard52';
             this.total = 52;
             for (var suite = 1; suite <= 4; suite++) {
                 for (var rank = 1; rank <= 13; rank++) {
@@ -40,10 +42,9 @@ module.exports = class Deck {
     }
     shuffle() {
         for (var i = 0; i < this.cards.length; i++) {
-            var randi = Math.floor(Math.random() * (this.numCards));
+            var randi = Math.floor(Math.random() * (this.cards.length));
             var rand = this.cards[randi];
             var ati = this.cards[i];
-            // console.log("swapping " + ati +  " and " + rand, i, randi);
             this.cards[i] = rand;
             this.cards[randi] = ati;
         }
@@ -67,7 +68,7 @@ module.exports = class Deck {
     }
     toString() {
         var str = "";
-        for (var i = 0; i < this.numCards(); i++) {
+        for (var i = 0; i < this.cards.size; i++) {
            str += this.cards[i].toString() + '\n';
         }
         return str;

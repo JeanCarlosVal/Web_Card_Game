@@ -1,6 +1,5 @@
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
-import { buildChatBox } from "/js/chatbox.js";
-const socket = io("http://localhost:8080/slap");
+const socket = io("http://localhost:8080/crazy8");
 
 // 3 displays
 var prelobby = document.getElementById("pre-lobby");
@@ -20,7 +19,6 @@ var leave = document.getElementById("leave");
 // in game tags (game in progess)
 var slap = document.getElementById("slap");
 var play = document.getElementById("play");
-var deck = document.getElementById("deck");
 
 var yourid = null;
 var yourlobby = null;
@@ -96,7 +94,7 @@ socket.on("player-join", (pkg) => {
 socket.on("joined-lobby", (pkg) => {
     // change displays
     prelobby.style.display = "none";
-    inlobby.style.display = "table-cell";
+    inlobby.style.display = "block";
 
     // show players in the room
     var playerArr = pkg.players;
@@ -109,98 +107,14 @@ socket.on("joined-lobby", (pkg) => {
 
     yourid = pkg.yourid;
     yourlobby = pkg.lobbyid;
-
-    buildChatBox(socket, yourid, yourlobby);
 });
 
 //
 // GAME INFORMATION
 //
 
-var isTurn = false;
-var numCards = 0;
-var isLock = -1;
-
-socket.on('game-prep', (pkg) => {
-    inlobby.style.display = "none";
-    prep.style.display = "table-cell";
-});
-
-socket.on('game-start', (pkg) => {
-    prep.style.display = "none";
-    game.style.display = "table-cell";
-
-    if (pkg.currentPlayer == yourid) {
-        isTurn = true;
-    }
-
-    newUpdate("Game Started.");
-});
-
-socket.on('your-turn', pkg => {
-    // isLock = pkg.isLock;
-    isTurn = true;
-});
-
-// slapping results
-socket.on('enemy-first', (pkg) => {
-    console.log("someone hit the deck");
-
-});
-socket.on('you-first', (pkg) => {
-    console.log("you slapped first!");
-    numCards += pkg.deckSize;
-});
-socket.on('too-slow', (pkg) => {
-    newUpdate("Someone was faster than you!");
-});
-socket.on('bad-slap', (pkg) => {
-    newUpdate("You slapped with no combo!");
-    numCards--;
-});
-
-socket.on('empty-deck', () => {
-    deck.innerHTML = "";
-});
-
-socket.on('put', pkg => {
-    isLock = false;
-    if (pkg.putter === yourid) {
-        console.log('you put');
-    }
-    else {
-        console.log('enemy put');
-    }
-    if (pkg.rank) deck.innerHTML = pkg.rank + " of " + pkg.suite
-    else deck.innerHTML = undefined;
-
-});
-// when the "grace period" stops
-// 1. people cannot slap w/o consequences
-socket.on('slap-time-off', pkg => {
-    deck.innerHTML = null;
-});
-
-slap.addEventListener('click', (e) => {
-    e.preventDefault();
-    socket.emit('slap', {
-        slapperid:yourid,
-        lobbyid:yourlobby
-    });
-});
-
-play.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (!isTurn) {
-        console.log("it's not ur turn!");
-        return;
-    }
-    socket.emit('put', {
-        playerid:yourid,
-        lobbyid:yourlobby
-    });
-});
-
 function newUpdate(text) {
-    console.log(text);
+    var up = document.createElement("li");
+    up.innerText = text;
+    updates.appendChild(text);
 }

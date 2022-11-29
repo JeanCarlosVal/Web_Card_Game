@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="/css/lobbytable.css">
+<link rel="stylesheet" href="/css/slap.css">
+
+<div id="pre-lobby" class="createRoomDisplay">
+    <p>Create a room or join an available room</p>
+    <button id="createRoom"> Create Room </button>
+    <input type="text" id="roomName">
+    <button id="refresh-rooms">Refresh Rooms</button>
+    <div id="rooms-table" class="rooms-table">
+        <table class="available-rooms">
+            <thead>
+                <tr>
+                    <th>Available Rooms</th>
+                    <th>Active Players</th>
+                    <th>Join</th>
+                </tr>
+            </thead>
+            <tbody id="available-rooms" >
+    
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="in-lobby">
+    <p>PLAYERS IN HERE:</p>
+    <ul id="players-in-lobby">
+    </ul>
+    <button id="leave">Leave Lobby</button>
+</div>
+
+<div id="prep">
+    <p>Starting Game...</p>
+</div>
+
+<div id="game" class="game">
+    <ul id="updates">UPDATES</ul>
+
+    <div id="play-area">
+        <div id="play-table">
+            <div id="face-up" class="deck"></div>
+            <div id="face-down" class="deck"></div>
+        </div>
+        <div id="your-area">
+            <div id="hand"></div>
+        </div>
+    </div>
+</div>
+
+<!-- <script type="module" src="/js/games/rooms.js"></script> -->
+<!-- <script type="module" src="/js/games/connection"></script> -->
+<script type="module" src="/js/games/crazy8/crazy8.js"></script>
