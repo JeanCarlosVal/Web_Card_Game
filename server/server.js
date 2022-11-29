@@ -279,7 +279,11 @@ slap.on('connection', (socket)=> {
         console.log("chat message: " + pkg.message + pkg.lobbyid);
         slap.to(pkg.lobbyid).emit("chat-message", {sender:pkg.sender, message:pkg.message});
     });
-    socket.on('put', (pkg) => {
+    socket.on('put', pkg => {
+        var lobby = slaplm.getLobby(pkg.lobbyid);
+        if (lobby.currentPlayer.socketid != socket.id) {
+            return;
+        }
         console.log(socket.id + " put down a card.")
         
         var lobby = slaplm.getLobby(pkg.lobbyid);
@@ -287,14 +291,40 @@ slap.on('connection', (socket)=> {
         var cardPut = lobby.deck.getTop(0).toString();
         socket.to(pkg.lobbyid).emit('enemy-put', {enemy:socket.id, card:cardPut});
         socket.to(lobby.currentPlayer.socketid).emit('your-turn');
+        console.log("current player" + lobby.currentPlayer.socketid);
+        var cardPut = lobby.put(socket.id);
+        var cardPutRank;
+        var cardPutSuite;
+        if (cardPut) {
+            cardPutRank = cardPut.rank;
+            cardPutSuite = cardPut.suite;
+        }
+        console.log("current player" + lobby.currentPlayer.socketid);
+        if (lobby.isPostLock) {
+            setTimeout(() => {
+                lobby.isPostLock = false;
+                slap.to(pkg.lobbyid).emit('empty-deck');
+                slap.to(lobby.currentPlayer.socketid).emit('your-turn');
+            }, 2000);
+        }
+        console.log("card played: "  + cardPut);
+        var isLock = (lobby.lock > 0)? true : false;
+        slap.to(pkg.lobbyid).emit('put', {putter:socket.id, rank:cardPutRank, suite:cardPutSuite});
+        socket.to(lobby.currentPlayer.socketid).emit('your-turn', {isLock:isLock}); // set lock status to current player
+
+        checkWinnerSlap(lobby);
     });
     socket.on('slap', (pkg) => {
         console.log(socket.id + " slapped the deck!");
         var lobby = slaplm.getLobby(pkg.lobbyid);
-        var result = lobby.play("slap", socket.id);
+        var result = lobby.slap(socket.id);
+        console.log("SLAP RESULT: " +  result);
         if (result == 'good') {
             socket.to(pkg.lobbyid).emit('enemy-first', {});
             socket.emit('you-first', {});
+            setTimeout(() => {
+                slap.to(pkg.lobbyid).emit('empty-deck');
+            }, 2000);
         }
         else if (result == 'slow') {
             socket.emit('too-slow', {});
@@ -303,10 +333,14 @@ slap.on('connection', (socket)=> {
             socket.to(pkg.lobbyid).emit('enemy-bad-slap', {});
             socket.emit('bad-slap', {});
         }
-        slap.to(pkg.lobbyid).emit('game-state-change', {});
+        checkWinnerSlap(lobby);
     });
 
 });
+
+function checkWinnerSlap(lobby) {
+    lobby.checkWinner();
+}
 
 
 const crazy8 = io.of('/crazy8'); // namespace

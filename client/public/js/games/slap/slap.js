@@ -20,6 +20,7 @@ var leave = document.getElementById("leave");
 // in game tags (game in progess)
 var slap = document.getElementById("slap");
 var play = document.getElementById("play");
+var deck = document.getElementById("deck");
 
 var yourid = null;
 var yourlobby = null;
@@ -118,6 +119,7 @@ socket.on("joined-lobby", (pkg) => {
 
 var isTurn = false;
 var numCards = 0;
+var isLock = -1;
 
 socket.on('game-prep', (pkg) => {
     inlobby.style.display = "none";
@@ -135,26 +137,48 @@ socket.on('game-start', (pkg) => {
     newUpdate("Game Started.");
 });
 
-socket.on('your-turn', (pkg) => {
+socket.on('your-turn', pkg => {
+    isLock = pkg.isLock;
     isTurn = true;
 });
 
+// slapping results
 socket.on('enemy-first', (pkg) => {
-    newUpdate("Someone hit the deck!");
-});
+    console.log("someone hit the deck");
 
+});
 socket.on('you-first', (pkg) => {
-    newUpdate("you slapped first!");
+    console.log("you slapped first!");
     numCards += pkg.deckSize;
 });
-
 socket.on('too-slow', (pkg) => {
     newUpdate("Someone was faster than you!");
 });
-
 socket.on('bad-slap', (pkg) => {
     newUpdate("You slapped with no combo!");
     numCards--;
+});
+
+socket.on('empty-deck', () => {
+    deck.innerHTML = "";
+});
+
+socket.on('put', pkg => {
+    isLock = false;
+    if (pkg.putter === yourid) {
+        console.log('you put');
+    }
+    else {
+        console.log('enemy put');
+    }
+    if (pkg.rank) deck.innerHTML = pkg.rank + " of " + pkg.suite
+    else deck.innerHTML = undefined;
+
+});
+// when the "grace period" stops
+// 1. people cannot slap w/o consequences
+socket.on('slap-time-off', pkg => {
+    deck.innerHTML = null;
 });
 
 slap.addEventListener('click', (e) => {
@@ -166,12 +190,11 @@ slap.addEventListener('click', (e) => {
 });
 
 play.addEventListener('click', (e) => {
+    e.preventDefault();
     if (!isTurn) {
         console.log("it's not ur turn!");
         return;
     }
-    isTurn = false;
-    e.preventDefault();
     socket.emit('put', {
         playerid:yourid,
         lobbyid:yourlobby
